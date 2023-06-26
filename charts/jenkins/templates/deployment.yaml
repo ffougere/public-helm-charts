@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: jenkins
-          image: "jenkins:latest"
+          #image: "jenkins:latest"
+          image: "jenkins:lts"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
