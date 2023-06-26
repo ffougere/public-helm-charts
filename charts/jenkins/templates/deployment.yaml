@@ -18,7 +18,8 @@ spec:
         - name: jenkins
           #image: "jenkins:latest"
           #image: "jenkins:lts"
-          image: "jenkins:2.401.1-jdk11"
+          #image: "jenkins:2.401.1-jdk11"
+          image: "jenkins:2.60.3"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
