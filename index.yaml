@@ -22,7 +22,7 @@ entries:
           url: https://github.com/jenkinsci/helm-charts/issues
     apiVersion: v2
     appVersion: 2.401.1
-    created: "2023-06-27T10:51:06.076311852-04:00"
+    created: "2023-06-30T16:28:08.964561474-04:00"
     description: Jenkins - Build great things at any scale! The leading open source
       automation server, Jenkins provides hundreds of plugins to support building,
       deploying and automating any project.
@@ -53,4 +53,17 @@ entries:
     urls:
     - https://github.com/ffougere/public-helm-charts/jenkins-4.3.28.tgz
     version: 4.3.28
-generated: "2023-06-27T10:51:06.072279339-04:00"
+  vault-helm:
+  - apiVersion: v2
+    created: "2023-06-30T16:28:08.997278154-04:00"
+    dependencies:
+    - name: vault
+      repository: ""
+    description: HashiCorp Vault Chart Custom
+    digest: 7b27f0ca1a2842692440794ecacb7b77d5cda7f3455aeb07ffe616e36ce5a7c9
+    name: vault-helm
+    type: application
+    urls:
+    - https://github.com/ffougere/public-helm-charts/vault-helm-1.0.0.tgz
+    version: 1.0.0
+generated: "2023-06-30T16:28:08.96176634-04:00"

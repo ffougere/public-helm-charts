@@ -1,0 +1,75 @@
+Step 1 : create helm chart
+- Option 1 : create helm helmchartname
+- Option 2 : copy from existing custom
+- Option 3 : create your own ... from scratch
+
+Step 2 : Configure your chart
+- Option 1 : create helm helmchartname
+- Option 2 : copy from existing custom
+- Option 3 : create your own ... from scratch
+
+
+Step 4 : put to git repo https://github.com/ffougere/public-helm-charts
+
+DOCROOT : /appli/ffougere-repo/public-helm-charts/public-helm-charts
+Note we create oiur charts from here
+example : helm package charts/chartname
+example : helm package charts/jenkins
+
+helm repo index --url https://github.com/ffougere/public-helm-charts --merge index.yaml .
+git status
+git add .
+git clone https://github.com/ffougere/sretools.git
+git push
+
+
+
+  487  k apply -f /appli/nginx-ingress/nginx-ingress-jenkins.yaml 
+  488  k -n jenkins get service
+  489  k apply -f /appli/nginx-ingress/nginx-ingress-jenkins.yaml 
+  490  k -n jenkins get pvc
+  491  k -n jenkins get pv
+  492  k -n jenkins get pod
+  493  k -n jenkins exec jenkins-deployment-84f84b6f9c-t6hsv cat /var/jenkins_home/secrets/initialAdminPassword
+  494  code charts/jenkins/templates/persistence.yaml
+  495  history
+  496  helm package charts/jenkins
+  497  helm repo index --url https://github.com/ffougere/public-helm-charts --merge index.yaml .
+  498  git status
+  499  git add .
+  500  git clone https://github.com/ffougere/sretools.git
+  501  git push
+  502  ls
+  503  rm -Rf sretools
+  504  helm package charts/jenkins
+  505  helm repo index --url https://github.com/ffougere/public-helm-charts --merge index.yaml .
+  506  git add .
+  507  git commit -m "Update"
+  508  git push
+  509  k -n jenkins get pods
+  510  k -n jenkins get pvc
+  511  k -n jenkins get pv
+  512  code charts/jenkins/templates/sa-jenkins.yaml
+  513  helm lint charts/jenkins/
+  514  history
+  515  k -n jenkins get pods
+  516  helm package charts/jenkins
+  517  helm repo index --url https://github.com/ffougere/public-helm-charts --merge index.yaml .
+  518  git add .
+  519  git commit -m "Update"
+  520  ls
+  521  ls charts/
+  522  ls
+  523  ls charts/
+  524  cp charts/
+  525  ls
+  526  cd charts/
+  527  ls
+  528  cp -R jenkins/ prometheus
+  529  cd prometheus/
+  530  ls
+  531  k get ns
+  532  cd ..
+  533  helm lint prometheus/
+  534  histoey
+  535  history

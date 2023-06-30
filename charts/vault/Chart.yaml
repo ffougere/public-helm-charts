@@ -1,0 +1,7 @@
+apiVersion: v2
+dependencies:
+- name: vault
+description: HashiCorp Vault Chart Custom
+name: vault-helm
+type: application
+version: 1.0.0
