@@ -9,12 +9,26 @@ Step 2 : Configure your chart
 - Option 3 : create your own ... from scratch
 
 
-Step 4 : put to git repo https://github.com/ffougere/public-helm-charts
+# Step 4 : put to git repo https://github.com/ffougere/public-helm-charts
 
 DOCROOT : /appli/ffougere-repo/public-helm-charts/public-helm-charts
 Note we create oiur charts from here
-example : helm package charts/chartname
+example : helm pac  kage charts/chartname
 example : helm package charts/jenkins
+
+# go to repo docroot
+cd /appli/ffougere-repo/public-helm-charts/public-helm-charts
+# package your chart
+helm package charts/vault
+# update repo index 
+helm repo index --url https://github.com/ffougere/public-helm-charts --merge index.yaml .
+# add every changes
+git add .
+# commit to repo
+git commit -m "adding vault"
+# update the repo
+git push
+
 
 helm repo index --url https://github.com/ffougere/public-helm-charts --merge index.yaml .
 git status
