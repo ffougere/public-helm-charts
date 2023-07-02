@@ -1,11 +1,20 @@
-apiVersion: v2
-dependencies:
-- name: vault
-description: HashiCorp Vault Chart Custom
-name: vault
-type: application
+#apiVersion: v2
+#dependencies:
+#- name: vault
+#description: HashiCorp Vault Chart Custom
+#name: vault
+#type: application
 #helm search repo hashicorp/vault --versions
 #NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                               
 #hashicorp/vault                         0.25.0          1.14.0          Official HashiCorp Vault Chart            
 #hashicorp/vault                         0.24.1          1.13.1          Official HashiCorp Vault Chart   
-version: 1.14.0
+#version: 1.14.0
+
+apiVersion: v2
+dependencies:
+#- name: mysql
+#  version: "9.3.4"
+#  repository: "https://charts.bitnami.com/bitnami"
+- name: vault
+  version: "1.14.0"
+  repository: "https://helm.releases.hashicorp.com"
