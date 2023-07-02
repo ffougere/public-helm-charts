@@ -11,3 +11,14 @@ global:
       cpu: '250m'
     metrics:
       enabled: true
+
+  ingress:
+    enabled: false
+
+    ingressClassName: ""
+
+    pathType: Prefix
+
+    activeService: true
+    hosts:
+      - host: vault.itblast.ovh
