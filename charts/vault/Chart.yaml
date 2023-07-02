@@ -11,6 +11,9 @@
 #version: 1.14.0
 
 apiVersion: v2
+name: vault
+type: application
+
 dependencies:
 #- name: mysql
 #  version: "9.3.4"
