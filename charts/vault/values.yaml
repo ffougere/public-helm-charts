@@ -3,11 +3,11 @@ global:
     tag: "1.2.1"
     pullPolicy: IfNotPresent
   resources:
-  requests:
-    memory: '256Mi'
-    cpu: '250m'
-  limits:
-    memory: '256Mi'
-    cpu: '250m'
-  metrics:
-    enabled:  true
+    requests:
+      memory: '256Mi'
+      cpu: '250m'
+    limits:
+      memory: '256Mi'
+      cpu: '250m'
+    metrics:
+      enabled: true
