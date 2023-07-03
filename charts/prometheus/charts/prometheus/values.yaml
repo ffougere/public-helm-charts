@@ -7,15 +7,24 @@ podSecurityPolicy:
 imagePullSecrets: []
 # - name: "image-pull-secret"
 
+## Define serviceAccount names for components. Defaults to component's fully qualified name.
+##
 serviceAccounts:
   server:
     create: true
     name: ""
     annotations: {}
 
+## Monitors ConfigMap changes and POSTs to a URL
+## Ref: https://github.com/prometheus-operator/prometheus-operator/tree/main/cmd/prometheus-config-reloader
+##
 configmapReload:
+  ## URL for configmap-reload to use for reloads
+  ##
   reloadUrl: ""
 
+  ## env sets environment variables to pass to the container. Can be set as name/value pairs,
+  ## read from secrets or configmaps.
   env: []
     # - name: SOMEVAR
     #   value: somevalue
@@ -27,9 +36,16 @@ configmapReload:
     #       optional: false
 
   prometheus:
+    ## If false, the configmap-reload container will not be deployed
+    ##
     enabled: true
+
+    ## configmap-reload container name
+    ##
     name: configmap-reload
 
+    ## configmap-reload container image
+    ##
     image:
       repository: quay.io/prometheus-operator/prometheus-config-reloader
       tag: v0.66.0
@@ -378,11 +394,26 @@ server:
     accessModes:
       - ReadWriteOnce
 
+    ## Prometheus server data Persistent Volume labels
+    ##
     labels: {}
+
+    ## Prometheus server data Persistent Volume annotations
+    ##
     annotations: {}
+
+    ## Prometheus server data Persistent Volume existing claim name
+    ## Requires server.persistentVolume.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
     existingClaim: ""
+
+    ## Prometheus server data Persistent Volume mount root path
+    ##
     mountPath: /data
-    size: 2Gi
+
+    ## Prometheus server data Persistent Volume size
+    ##
+    size: 8Gi
 
     ## Prometheus server data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -602,6 +633,8 @@ server:
 ## Prometheus server ConfigMap entries for rule files (allow prometheus labels interpolation)
 ruleFiles: {}
 
+## Prometheus server ConfigMap entries
+##
 serverFiles:
   ## Alerts configuration
   ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
@@ -640,6 +673,20 @@ serverFiles:
           - targets:
             - localhost:9090
 
+      # A scrape configuration for running Prometheus on a Kubernetes cluster.
+      # This uses separate scrape configs for cluster components (i.e. API server, node)
+      # and services to allow each to use different authentication configs.
+      #
+      # Kubernetes labels will be added as Prometheus labels on metrics via the
+      # `labelmap` relabeling action.
+
+      # Scrape config for API servers.
+      #
+      # Kubernetes exposes API servers as endpoints to the default/kubernetes
+      # service so this uses `endpoints` role and uses relabelling to only keep
+      # the endpoints associated with the default/kubernetes service using the
+      # default named port `https`. This works for single API server deployments as
+      # well as HA API server deployments.
       - job_name: 'kubernetes-apiservers'
 
         kubernetes_sd_configs:
@@ -649,6 +696,12 @@ serverFiles:
         # `http`.
         scheme: https
 
+        # This TLS & bearer token file config is used to connect to the actual scrape
+        # endpoints for cluster components. This is separate to discovery auth
+        # configuration because discovery & scraping are two separate concerns in
+        # Prometheus. The discovery auth config is automatic if Prometheus runs inside
+        # the cluster. Otherwise, more config options have to be provided within the
+        # <kubernetes_sd_config>.
         tls_config:
           ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
           # If your node certificates are self-signed or use a different CA to the
@@ -673,6 +726,13 @@ serverFiles:
         # Default to scraping over https. If required, just disable this or change to
         # `http`.
         scheme: https
+
+        # This TLS & bearer token file config is used to connect to the actual scrape
+        # endpoints for cluster components. This is separate to discovery auth
+        # configuration because discovery & scraping are two separate concerns in
+        # Prometheus. The discovery auth config is automatic if Prometheus runs inside
+        # the cluster. Otherwise, more config options have to be provided within the
+        # <kubernetes_sd_config>.
         tls_config:
           ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
           # If your node certificates are self-signed or use a different CA to the
@@ -699,7 +759,17 @@ serverFiles:
 
 
       - job_name: 'kubernetes-nodes-cadvisor'
+
+        # Default to scraping over https. If required, just disable this or change to
+        # `http`.
         scheme: https
+
+        # This TLS & bearer token file config is used to connect to the actual scrape
+        # endpoints for cluster components. This is separate to discovery auth
+        # configuration because discovery & scraping are two separate concerns in
+        # Prometheus. The discovery auth config is automatic if Prometheus runs inside
+        # the cluster. Otherwise, more config options have to be provided within the
+        # <kubernetes_sd_config>.
         tls_config:
           ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
           # If your node certificates are self-signed or use a different CA to the
@@ -1063,7 +1133,7 @@ extraManifests: []
 alertmanager:
   ## If false, alertmanager will not be installed
   ##
-  enabled: true
+  enabled: false
 
   persistence:
     size: 2Gi
@@ -1078,9 +1148,16 @@ alertmanager:
 ## Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics
 ##
 kube-state-metrics:
+  ## If false, kube-state-metrics sub-chart will not be installed
+  ##
   enabled: true
 
+## promtheus-node-exporter sub-chart configurable values
+## Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-node-exporter
+##
 prometheus-node-exporter:
+  ## If false, node-exporter will not be installed
+  ##
   enabled: true
 
   rbac:
@@ -1093,7 +1170,9 @@ prometheus-node-exporter:
 ## Please see https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-pushgateway
 ##
 prometheus-pushgateway:
-  enabled: true
+  ## If false, pushgateway will not be installed
+  ##
+  enabled: false
 
   # Optional service annotations
   serviceAnnotations:
