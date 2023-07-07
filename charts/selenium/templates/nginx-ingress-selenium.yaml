@@ -1,19 +1,19 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-ingress-grafana
-  namespace: grafana
+  name: nginx-ingress-selenium
+  namespace: selenium
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: "grafana.itblast.ovh"
+  - host: "selenium.itblast.ovh"
     http:
       paths:
       - pathType: Prefix
         path: "/login"
         backend:
           service:
-            name: grafana
+            name: selenium-hub
             port:
-              number: 80
+              number: 4444
