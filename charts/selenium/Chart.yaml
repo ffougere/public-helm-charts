@@ -1,0 +1,7 @@
+apiVersion: v2
+dependencies:
+- name: selenium-grid
+name: selenium
+description: Selenium
+version: 1.0.0
+type: application
