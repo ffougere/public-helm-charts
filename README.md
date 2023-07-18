@@ -21,3 +21,5 @@ e62dcf964b924df6bf61cbd42bee3de0
 # if secret usage :
 printf $(kubectl get secret --namespace jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 
+
+Adding Activemq
