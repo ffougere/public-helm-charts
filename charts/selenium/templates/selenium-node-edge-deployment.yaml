@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: selenium-node-edge
+  namespace: selenium
+  labels:
+    app: selenium-node-edge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: selenium-node-edge
+  template:
+    metadata:
+      labels:
+        app: selenium-node-edge
+    spec:
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      containers:
+      - name: selenium-node-edge
+        # to get the desired version : https://hub.docker.com/r/selenium/node-edge/tags
+        # image: selenium/node-edge:104.0
+        image: selenium/node-edge:114.0
+        ports:
+          - containerPort: 5557
+        volumeMounts:
+          - mountPath: /dev/shm
+            name: dshm
+        env:
+          - name: HUB_PORT_4444_TCP_PORT
+            value: "4444"
+          - name: SE_EVENT_BUS_HOST
+            value: "selenium-selenium-hub"
+          - name: SE_EVENT_BUS_SUBSCRIBE_PORT
+            value: "4443"
+          - name: SE_EVENT_BUS_PUBLISH_PORT
+            value: "4442"
+          - name: JAVA_TOOL_OPTIONS
+            value: -Xmx900m
+          - name: SE_NODE_PORT
+            value: "5557"
+          - name: SE_NODE_GRID_URL
+            value: "http://selenium-selenium-hub:4444"
+            #- name: SE_NODE_HOST
+          #  value: "selenium-node-edge"
+          - name: SE_NODE_OVERRIDE_MAX_SESSIONS
+            value: "true"
+        resources:
+          limits:
+            #memory: "1000Mi"
+            #cpu: ".5"
+            cpu: 2000m # 2 vCPU
+            memory: 4000Mi # 4 Go
+          #requests:
+          #  cpu: 50m
+          #  memory: 100Mi

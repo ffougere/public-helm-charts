@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: selenium-selenium-hub
+  namespace: selenium
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: selenium-selenium-hub
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0      
+  template:
+    metadata:
+      labels:
+        app: selenium-selenium-hub
+    spec:
+      containers:
+      - name: selenium-selenium-hub
+        #https://hub.docker.com/r/selenium/hub/tags
+        image: selenium/hub:4.9.1
+        resources:
+          limits:
+            cpu: ".5" #2000m
+            memory: "2000Mi" #4000Mi
+          #requests:
+          #  cpu: 50m
+          #  memory: 100Mi
+        ports:
+          - containerPort: 4444
+        env:
+          - name: JAVA_TOOL_OPTS
+            value: "-Xmx1024m"
+          #- name: POOL_MAX
+          #  value: "500"
+          #- name: GRID_NEW_SESSION_WAIT_TIMEOUT
+          #  value: "-1"
+            #- name: GRID_JETTY_MAX_THREADS
+            #  value: "-1"
+            #- name: GRID_NODE_POLLING
+           #   value: "5000"
+           # - name: GRID_CLEAN_UP_CYCLE
+           #   value: "5000"
+           # - name: GRID_TIMEOUT
+           #   value: "600"
+           # - name: GRID_BROWSER_TIMEOUT
+           #   value: "600"
+          
+          - name: JAVA_OPTS
+            value: -Dselenium.LOGGER.level=FINE
+          - name: GRID_TIMEOUT
+            value: "60"
+          - name: GRID_BROWSER_TIMEOUT
+            value: "45"
+          - name: GRID_MAX_SESSION
+            value: "3" # old = 2
+          - name: GRID_HUB_PORT
+            value: "4444"
+          - name: SE_EVENT_BUS_HOST
+            value: selenium-selenium-hub
+          - name: SE_EVENT_BUS_PUBLISH_PORT
+            value: "4442"
+          - name: SE_EVENT_BUS_SUBSCRIBE_PORT
+            value: "4443"
+            #- name: GRID_UNREGISTER_IF_STILL_DOWN_AFTER
+            #  value: "30000"
+        livenessProbe:
+            httpGet:
+              path: /wd/hub/status
+              port: 4444
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /wd/hub/status
+            port: 4444
+          initialDelaySeconds: 30
+          timeoutSeconds: 5

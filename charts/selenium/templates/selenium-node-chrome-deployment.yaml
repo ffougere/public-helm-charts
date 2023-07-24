@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: selenium-node-chrome
+  namespace: selenium
+  labels:
+    app: selenium-node-chrome
+spec:
+  replicas: 6
+  #minReplicas: 2
+  #maxReplicas: 11
+  selector:
+    matchLabels:
+      app: selenium-node-chrome
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: selenium-node-chrome
+    spec:
+      containers:
+      - name: selenium-node-chrome
+        #https://hub.docker.com/r/selenium/node-chrome/tags
+        image: selenium/node-chrome:114.0
+        env:
+          - name: SE_EVENT_BUS_HOST
+            value: "selenium-selenium-hub"
+          - name: SE_EVENT_BUS_PUBLISH_PORT
+            value: "4442"
+          - name: SE_EVENT_BUS_SUBSCRIBE_PORT
+            value: "4443"
+          - name: HUB_PORT_4444_TCP_PORT
+            value: "4444"
+          - name: JAVA_TOOL_OPTIONS
+            value: -Xmx900m
+          - name: SE_OPTS
+          #- name: SE_NODE_PORT
+          #  value: "5555"
+          - name: SE_NODE_GRID_URL
+            value: "http://selenium-selenium-hub:4444"
+          #- name: SE_NODE_HOST
+          #  value: "selenium-node-chrome"
+          - name: NODE_MAX_SESSION
+            value: "2"
+          - name: NODE_MAX_INSTANCES
+            value: "2"
+          - name: SE_NODE_OVERRIDE_MAX_SESSIONS
+            value: "true"
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            #cpu: ".5"
+            cpu: 2000m # 2 vCPU
+            #memory: 400Mi #4000Mi # 4 Go
+            memory: "4000Mi"
+          requests:
+            cpu: 50m
+            memory: 100Mi
+        ports:
+          - containerPort: 5555
+        volumeMounts:
+          - mountPath: /dev/shm
+            name: dshm
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
