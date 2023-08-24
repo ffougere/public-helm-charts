@@ -14,6 +14,6 @@ spec:
         path: "/"
         backend:
           service:
-            name: selenium-hub
+            name: selenium-selenium-hub
             port:
               number: 4444
