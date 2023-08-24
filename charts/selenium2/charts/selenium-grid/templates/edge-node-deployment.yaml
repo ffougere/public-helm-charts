@@ -1,0 +1,27 @@
+{{- if and .Values.edgeNode.enabled ((eq (include "seleniumGrid.useKEDA" .) "true") | ternary (eq .Values.autoscaling.scalingType "deployment") .Values.edgeNode.deploymentEnabled) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "seleniumGrid.edgeNode.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: selenium-edge-node
+    app.kubernetes.io/name: selenium-edge-node
+    {{- include "seleniumGrid.commonLabels" . | nindent 4 }}
+    {{- with .Values.edgeNode.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.customLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.edgeNode.replicas }}
+  selector:
+    matchLabels:
+      app: selenium-edge-node
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- $podScope := deepCopy . -}}
+{{- $_ := set $podScope "name" "selenium-edge-node" -}}
+{{- $_ =  set $podScope "node" .Values.edgeNode  -}}
+{{- include "seleniumGrid.podTemplate" $podScope | nindent 2 }}
+{{- end }}
