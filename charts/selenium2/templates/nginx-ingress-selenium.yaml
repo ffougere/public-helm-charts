@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-ingress-selenium
-  namespace: selenium
+  #namespace: selenium2
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
@@ -14,6 +14,6 @@ spec:
         path: "/"
         backend:
           service:
-            name: selenium-hub
+            name: selenium-selenium-hub
             port:
               number: 4444

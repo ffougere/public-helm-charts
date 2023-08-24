@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: selenium-selenium-hub
-  namespace: selenium
+  #namespace: selenium2
   labels:
     app: selenium-selenium-hub
 spec:
