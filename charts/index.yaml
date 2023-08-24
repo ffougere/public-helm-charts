@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   selenium:
   - apiVersion: v2
-    created: "2023-08-24T10:21:32.130416448-04:00"
+    created: "2023-08-24T10:26:13.460087295-04:00"
     dependencies:
     - name: selenium-grid
       repository: ""
@@ -13,4 +13,4 @@ entries:
     urls:
     - https://github.com/ffougere/public-helm-charts/charts/selenium.tgz
     version: 1.0.0
-generated: "2023-08-24T10:21:31.687437243-04:00"
+generated: "2023-08-24T10:26:12.88907503-04:00"
