@@ -165,6 +165,7 @@ hub:
   imageName: selenium/hub
   # Selenium Hub image tag (this overwrites global.seleniumGrid.imageTag parameter)
   # imageTag: 4.10.0-20230607
+  imageTag: 4.9.0
   # Image pull policy (see https://kubernetes.io/docs/concepts/containers/images/#updating-images)
   imagePullPolicy: IfNotPresent
   # Image pull secret (see https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
@@ -263,7 +264,7 @@ chromeNode:
   enabled: true
   deploymentEnabled: true
   # Number of chrome nodes
-  replicas: 6
+  replicas: 2
   # Image of chrome nodes
   #imageName: selenium/node-chrome
   image: selenium/node-chrome:114.0
@@ -348,7 +349,7 @@ firefoxNode:
   enabled: true
   deploymentEnabled: true
 
-  replicas: 1
+  replicas: 2
   imageName: selenium/node-firefox
   imagePullPolicy: IfNotPresent
   imagePullSecret: ""
@@ -417,7 +418,7 @@ firefoxNode:
 
 # Configuration for edge nodes
 edgeNode:
-  enabled: true
+  enabled: false
   deploymentEnabled: true
   replicas: 1
   selector:
@@ -425,7 +426,7 @@ edgeNode:
       app: selenium-node-edge
   
   #imageName: selenium/node-edge
-  image: selenium/node-edge:114.0
+  image: selenium/node-edge:112.0
   imagePullPolicy: IfNotPresent
   imagePullSecret: ""
 
