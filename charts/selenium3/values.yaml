@@ -352,7 +352,7 @@ firefoxNode:
   enabled: true
   deploymentEnabled: true
 
-  replicas: 2
+  replicas: 1
   imageName: selenium/node-firefox
   imagePullPolicy: IfNotPresent
   imagePullSecret: ""
