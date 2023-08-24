@@ -22,7 +22,7 @@ entries:
           url: https://github.com/jenkinsci/helm-charts/issues
     apiVersion: v2
     appVersion: 2.401.1
-    created: "2023-08-24T15:47:48.853166067-04:00"
+    created: "2023-08-24T19:42:07.211261375-04:00"
     description: Jenkins - Build great things at any scale! The leading open source
       automation server, Jenkins provides hundreds of plugins to support building,
       deploying and automating any project.
@@ -55,7 +55,7 @@ entries:
     version: 4.3.28
   selenium:
   - apiVersion: v2
-    created: "2023-08-24T15:47:48.859617761-04:00"
+    created: "2023-08-24T19:42:07.218695874-04:00"
     dependencies:
     - name: selenium-grid
       repository: https://www.selenium.dev/docker-selenium/selenium-grid
@@ -68,7 +68,7 @@ entries:
     - https://github.com/ffougere/public-helm-charts/charts/selenium-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v2
-    created: "2023-08-24T15:47:48.856444608-04:00"
+    created: "2023-08-24T19:42:07.21447583-04:00"
     dependencies:
     - name: selenium-grid
       repository: https://www.selenium.dev/docker-selenium/selenium-grid
@@ -81,7 +81,7 @@ entries:
     - https://github.com/ffougere/public-helm-charts/charts/selenium-1.0.0.tgz
     version: 1.0.0
   - apiVersion: v2
-    created: "2023-08-24T15:47:48.9122134-04:00"
+    created: "2023-08-24T19:42:07.280581531-04:00"
     dependencies:
     - name: selenium-grid
       repository: ""
@@ -94,13 +94,13 @@ entries:
     version: 1.0.0
   selenium3:
   - apiVersion: v2
-    created: "2023-08-24T15:47:48.863878274-04:00"
+    created: "2023-08-24T19:42:07.222990773-04:00"
     dependencies:
     - name: selenium-grid
       repository: https://www.selenium.dev/docker-selenium
       version: 0.20.0
     description: Selenium Grid
-    digest: a078c68511a17793e810cb5b22fc03af7475e328e75db7ebdac00910c88ffd0b
+    digest: ec64a214b6cd4130a56e4e21278b5f003bc4281c631f76a5316444af2cb280a8
     name: selenium3
     type: application
     urls:
@@ -108,7 +108,7 @@ entries:
     version: 2.0.0
   vault-helm:
   - apiVersion: v2
-    created: "2023-08-24T15:47:48.907884052-04:00"
+    created: "2023-08-24T19:42:07.276122088-04:00"
     dependencies:
     - name: vault
       repository: ""
@@ -119,4 +119,4 @@ entries:
     urls:
     - https://github.com/ffougere/public-helm-charts/charts/vault-helm-1.0.0.tgz
     version: 1.0.0
-generated: "2023-08-24T15:47:48.850468967-04:00"
+generated: "2023-08-24T19:42:07.208729269-04:00"

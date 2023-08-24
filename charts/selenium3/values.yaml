@@ -495,3 +495,46 @@ edgeNode:
   # Wait for pod startup
   startupProbe: {}
   terminationGracePeriodSeconds: 30
+
+selenium-grid:
+  hub:
+    livenessProbe:
+      enabled: true
+      path: /wd/hd/status
+      initialDelaySeconds: 10
+      failureThreshold: 10
+      timeoutSeconds: 30
+      periodSeconds: 10
+      successThreshold: 2
+    # Readiness probe settings
+    readinessProbe:
+      enabled: true
+      path: /wd/hd/status
+      initialDelaySeconds: 12
+      failureThreshold: 10
+      timeoutSeconds: 30
+      periodSeconds: 10
+      successThreshold: 2
+  ##############
+  chromeNode:
+    # Number of chrome nodes
+    replicas: 2
+    resources:
+      requests:
+        memory: 128Mi #"1Gi"
+        cpu: 50m #"1"
+      limits:
+        cpu: 2000m # 2 vCPU
+        memory: "4000Mi"
+  
+  edgeNode:
+    # Number of chrome nodes
+    replicas: 1
+    resources:
+      requests:
+        memory: 256Mi #"1Gi"
+        cpu: 50m #"1"
+      limits:
+        cpu: 1000m 
+        memory: "2048Mi"
+  
