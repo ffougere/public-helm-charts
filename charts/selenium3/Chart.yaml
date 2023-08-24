@@ -11,6 +11,3 @@ dependencies:
 - name: selenium-grid
   version: 0.20.0
   repository: https://www.selenium.dev/docker-selenium
-  
-  
-  

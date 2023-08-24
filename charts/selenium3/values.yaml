@@ -163,6 +163,7 @@ components:
 
 # Configuration for selenium hub deployment (applied only if `isolateComponents: false`)
 hub:
+  name: selenium-selenium-hub
   # Selenium Hub image name
   imageName: selenium/hub
   # Selenium Hub image tag (this overwrites global.seleniumGrid.imageTag parameter)
