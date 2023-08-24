@@ -187,21 +187,21 @@ hub:
   # Liveness probe settings
   livenessProbe:
     enabled: true
-    path: /readyz
+    path: /wd/hd/status
     initialDelaySeconds: 10
     failureThreshold: 10
-    timeoutSeconds: 10
+    timeoutSeconds: 30
     periodSeconds: 10
-    successThreshold: 1
+    successThreshold: 2
   # Readiness probe settings
   readinessProbe:
     enabled: true
-    path: /readyz
+    path: /wd/hd/status
     initialDelaySeconds: 12
     failureThreshold: 10
-    timeoutSeconds: 10
+    timeoutSeconds: 30
     periodSeconds: 10
-    successThreshold: 1
+    successThreshold: 2
   # Custom sub path for the hub deployment
   subPath: /
   # Custom environment variables for selenium-hub
