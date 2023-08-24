@@ -5,7 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app.kubernetes.io/name: selenium-hub
+    app.kubernetes.io/name: selenium-selenium-hub
   #labels:
   #  app: selenium-hub
   ports:
