@@ -22,7 +22,7 @@ entries:
           url: https://github.com/jenkinsci/helm-charts/issues
     apiVersion: v2
     appVersion: 2.401.1
-    created: "2023-08-24T13:42:33.04197332-04:00"
+    created: "2023-08-24T13:54:18.094401561-04:00"
     description: Jenkins - Build great things at any scale! The leading open source
       automation server, Jenkins provides hundreds of plugins to support building,
       deploying and automating any project.
@@ -55,7 +55,7 @@ entries:
     version: 4.3.28
   selenium:
   - apiVersion: v2
-    created: "2023-08-24T13:42:33.048425438-04:00"
+    created: "2023-08-24T13:54:18.10190458-04:00"
     dependencies:
     - name: selenium-grid
       repository: https://www.selenium.dev/docker-selenium/selenium-grid
@@ -68,7 +68,7 @@ entries:
     - https://github.com/ffougere/public-helm-charts/charts/selenium-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v2
-    created: "2023-08-24T13:42:33.045181262-04:00"
+    created: "2023-08-24T13:54:18.098044235-04:00"
     dependencies:
     - name: selenium-grid
       repository: https://www.selenium.dev/docker-selenium/selenium-grid
@@ -81,7 +81,7 @@ entries:
     - https://github.com/ffougere/public-helm-charts/charts/selenium-1.0.0.tgz
     version: 1.0.0
   - apiVersion: v2
-    created: "2023-08-24T13:42:33.084347117-04:00"
+    created: "2023-08-24T13:54:18.137488405-04:00"
     dependencies:
     - name: selenium-grid
       repository: ""
@@ -94,7 +94,7 @@ entries:
     version: 1.0.0
   vault-helm:
   - apiVersion: v2
-    created: "2023-08-24T13:42:33.080599534-04:00"
+    created: "2023-08-24T13:54:18.13393721-04:00"
     dependencies:
     - name: vault
       repository: ""
@@ -105,4 +105,4 @@ entries:
     urls:
     - https://github.com/ffougere/public-helm-charts/charts/vault-helm-1.0.0.tgz
     version: 1.0.0
-generated: "2023-08-24T13:42:33.039171928-04:00"
+generated: "2023-08-24T13:54:18.09091406-04:00"
