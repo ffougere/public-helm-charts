@@ -1,6 +1,6 @@
-# ChartMuseum
+# SeleniumGrid
 
-[ChartMuseum](https://chartmuseum.com/) is an open-source, easy to deploy, Helm Chart Repository server.
+[SeleniumGrid](https://selenium.com/) is an open-source, easy to deploy, Helm Chart Repository server.
 
 This chart is a "proxy" chart. It depends on the official Helm chart but with extra Amadeus-specific customization.
 
@@ -10,23 +10,23 @@ To import a new version of the official chart you should do:
 
 ```bash
 # Register official chart repository
-helm repo add chartmuseum https://chartmuseum.github.io/charts
+helm repo add selenium https://selenium.github.io/charts
 
 cd charts
 
 # Pull the new chart
-helm pull --version '<new version>' chartmuseum/chartmuseum
+helm pull --version '<new version>' selenium/selenium
 
 # Replace the current copy with the newly pulled chart
-rm --force --recursive chartmuseum
-tar --extract --file chartmuseum-*.tgz --gzip
-rm chartmuseum-*.tgz
-git add chartmuseum
+rm --force --recursive selenium
+tar --extract --file selenium-*.tgz --gzip
+rm selenium-*.tgz
+git add selenium
 ```
 
 The deployment require the following manual configuration:
 
 ```bash
 # Create the secret with the proper credentials to connect to Azure
-kubectl --namespace chartmuseum create secret generic credentials --from-literal="access-key=+++++" --from-literal="account=+++++"
+kubectl --namespace selenium create secret generic credentials --from-literal="access-key=+++++" --from-literal="account=+++++"
 ```
