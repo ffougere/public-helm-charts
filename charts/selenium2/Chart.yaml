@@ -4,4 +4,7 @@ description: Selenium Grid
 type: application
 version: 1.0.0
 dependencies:
+#- name: selenium-grid
 - name: selenium-grid
+  version: 1.2.3
+    repository: https://www.selenium.dev/docker-selenium/selenium-grid
