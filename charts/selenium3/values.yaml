@@ -498,6 +498,7 @@ edgeNode:
 
 selenium-grid:
   hub:
+    replicas: 2
     livenessProbe:
       enabled: true
       path: /wd/hd/status
@@ -505,7 +506,7 @@ selenium-grid:
       failureThreshold: 10
       timeoutSeconds: 30
       periodSeconds: 10
-      successThreshold: 2
+      successThreshold: 1
     # Readiness probe settings
     readinessProbe:
       enabled: true
@@ -514,7 +515,7 @@ selenium-grid:
       failureThreshold: 10
       timeoutSeconds: 30
       periodSeconds: 10
-      successThreshold: 2
+      successThreshold: 1
   ##############
   chromeNode:
     # Number of chrome nodes
