@@ -49,7 +49,8 @@ components:
   # Configuration for Event Bus component
   eventBus:
     # Event Bus image name
-    imageName: selenium/event-bus
+    imageName:
+     selenium/event-bus
     # Event Bus image tag (this overwrites global.seleniumGrid.imageTag parameter)
     # imageTag: 4.10.0-20230607
 
@@ -163,7 +164,7 @@ components:
 
 # Configuration for selenium hub deployment (applied only if `isolateComponents: false`)
 hub:
-  name: selenium-selenium-hub
+  nameOverride: selenium-selenium-hub
   # Selenium Hub image name
   imageName: selenium/hub
   # Selenium Hub image tag (this overwrites global.seleniumGrid.imageTag parameter)
