@@ -22,7 +22,7 @@ entries:
           url: https://github.com/jenkinsci/helm-charts/issues
     apiVersion: v2
     appVersion: 2.401.1
-    created: "2023-08-25T16:28:06.555728806-04:00"
+    created: "2023-08-25T16:38:10.002855233-04:00"
     description: Jenkins - Build great things at any scale! The leading open source
       automation server, Jenkins provides hundreds of plugins to support building,
       deploying and automating any project.
@@ -53,9 +53,24 @@ entries:
     urls:
     - https://github.com/ffougere/public-helm-charts/charts/jenkins-4.3.28.tgz
     version: 4.3.28
+  kyverno:
+  - apiVersion: v2
+    created: "2023-08-25T16:38:10.023648026-04:00"
+    dependencies:
+    - name: kyverno
+      repository: ""
+    - name: kyverno-policies
+      repository: ""
+    description: Kyverno - Kubernetes Native Policy Management - https://kyverno.github.io/kyverno/
+    digest: 3cf373ad3802000c6b1b735a2e7e31a50182bd0c7798ff9e40e5e0da89a7df7b
+    name: kyverno
+    type: application
+    urls:
+    - https://github.com/ffougere/public-helm-charts/charts/kyverno-1.0.0.tgz
+    version: 1.0.0
   selenium:
   - apiVersion: v2
-    created: "2023-08-25T16:28:06.564727977-04:00"
+    created: "2023-08-25T16:38:10.030197811-04:00"
     dependencies:
     - name: selenium-grid
       repository: https://www.selenium.dev/docker-selenium/selenium-grid
@@ -68,7 +83,7 @@ entries:
     - https://github.com/ffougere/public-helm-charts/charts/selenium-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v2
-    created: "2023-08-25T16:28:06.561115516-04:00"
+    created: "2023-08-25T16:38:10.026956294-04:00"
     dependencies:
     - name: selenium-grid
       repository: https://www.selenium.dev/docker-selenium/selenium-grid
@@ -81,7 +96,7 @@ entries:
     - https://github.com/ffougere/public-helm-charts/charts/selenium-1.0.0.tgz
     version: 1.0.0
   - apiVersion: v2
-    created: "2023-08-25T16:28:06.603475189-04:00"
+    created: "2023-08-25T16:38:10.067225007-04:00"
     dependencies:
     - name: selenium-grid
       repository: ""
@@ -94,7 +109,7 @@ entries:
     version: 1.0.0
   selenium3:
   - apiVersion: v2
-    created: "2023-08-25T16:28:06.567991833-04:00"
+    created: "2023-08-25T16:38:10.03352424-04:00"
     dependencies:
     - name: selenium-grid
       repository: https://www.selenium.dev/docker-selenium
@@ -108,7 +123,7 @@ entries:
     version: 2.0.0
   vault-helm:
   - apiVersion: v2
-    created: "2023-08-25T16:28:06.600158667-04:00"
+    created: "2023-08-25T16:38:10.063996798-04:00"
     dependencies:
     - name: vault
       repository: ""
@@ -119,4 +134,4 @@ entries:
     urls:
     - https://github.com/ffougere/public-helm-charts/charts/vault-helm-1.0.0.tgz
     version: 1.0.0
-generated: "2023-08-25T16:28:06.55235986-04:00"
+generated: "2023-08-25T16:38:09.999801453-04:00"

@@ -1,19 +1,19 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-ingress-selenium
-  namespace: selenium
+  name: nginx-ingress-kyverno
+  namespace: grafana
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: "selenium.itblast.ovh"
+  - host: "kyverno.itblast.ovh"
     http:
       paths:
       - pathType: Prefix
-        path: "/"
+        path: "/login"
         backend:
           service:
-            name: selenium-hub
+            name: kyverno
             port:
-              number: 4444
+              number: 80
