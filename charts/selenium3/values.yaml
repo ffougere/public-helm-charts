@@ -498,7 +498,7 @@ edgeNode:
 
 selenium-grid:
   hub:
-    replicas: 2
+    #replicas: 2
     livenessProbe:
       enabled: true
       path: /wd/hd/status
