@@ -10,7 +10,7 @@ imagePullSecrets: []
 serviceAccounts:
   server:
     create: true
-    name: ""
+    name: "prometheus"
     annotations: {}
 
 configmapReload:
