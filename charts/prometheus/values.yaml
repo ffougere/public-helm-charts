@@ -384,19 +384,9 @@ server:
     ##
     sizeLimit: ""
 
-  ## Annotations to be added to Prometheus server pods
-  ##
-  podAnnotations: {}
-    # iam.amazonaws.com/role: prometheus
-
-  ## Labels to be added to Prometheus server pods
-  ##
-  podLabels: {}
-
-  ## Prometheus AlertManager configuration
-  ##
-  alertmanagers: []
-
+  podLabels:
+    type: monitoring
+  
   ## Specify if a Pod Security Policy for node-exporter must be created
   ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
   ##
