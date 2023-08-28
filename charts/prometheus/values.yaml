@@ -69,50 +69,9 @@ configmapReload:
     resources: {}
 
 server:
-  ## Prometheus server container name
-  ##
-  name: server
-
-  ## Use a ClusterRole (and ClusterRoleBinding)
-  ## - If set to false - we define a RoleBinding in the defined namespaces ONLY
-  ##
-  ## NB: because we need a Role with nonResourceURL's ("/metrics") - you must get someone with Cluster-admin privileges to define this role for you, before running with this setting enabled.
-  ##     This makes prometheus work - for users who do not have ClusterAdmin privs, but wants prometheus to operate on their own namespaces, instead of clusterwide.
-  ##
-  ## You MUST also set namespaces to the ones you have access to and want monitored by Prometheus.
-  ##
-  # useExistingClusterRoleName: nameofclusterrole
-
-  ## If set it will override prometheus.server.fullname value for ClusterRole and ClusterRoleBinding
-  ##
-  clusterRoleNameOverride: ""
-
-  ## namespaces to monitor (instead of monitoring all - clusterwide). Needed if you want to run without Cluster-admin privileges.
-  # namespaces:
-  #   - yournamespace
-
-  # sidecarContainers - add more containers to prometheus server
-  # Key/Value where Key is the sidecar `- name: <Key>`
-  # Example:
-  #   sidecarContainers:
-  #      webserver:
-  #        image: nginx
+  name: prometheus-ss
   sidecarContainers: {}
-
-  # sidecarTemplateValues - context to be used in template for sidecarContainers
-  # Example:
-  #   sidecarTemplateValues: *your-custom-globals
-  #   sidecarContainers:
-  #     webserver: |-
-  #       {{ include "webserver-container-template" . }}
-  # Template for `webserver-container-template` might looks like this:
-  #   image: "{{ .Values.server.sidecarTemplateValues.repository }}:{{ .Values.server.sidecarTemplateValues.tag }}"
-  #   ...
-  #
   sidecarTemplateValues: {}
-
-  ## Prometheus server container image
-  ##
   image:
     repository: quay.io/prometheus/prometheus
     # if not set appVersion field from Chart.yaml is used

@@ -1,0 +1,22 @@
+apiVersion: v2
+name: prometheus
+type: application
+description: Prometheus Deployment
+version: 0.1.0
+appVersion: "1.0.0"
+dependencies:
+#- name: helm-charts/charts/prometheus
+- name: prometheus
+  #version: "1.14.0"
+  version: "22.7.0" # chart version to use
+  repository: "https://prometheus-community.github.io/helm-charts"
+
+#helm search repo prometheus-community/
+#helm search repo prometheus-community/prometheus-operator --versions
+#helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+#helm search repo prometheus-community/ --versions
+
+#NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                               
+#hashicorp/vault                         0.25.0          1.14.0          Official HashiCorp Vault Chart            
+#hashicorp/vault                         0.24.1          1.13.1          Official HashiCorp Vault Chart   
+#version: 1.14.0

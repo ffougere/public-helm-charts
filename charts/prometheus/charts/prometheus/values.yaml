@@ -48,7 +48,7 @@ configmapReload:
     ##
     image:
       repository: quay.io/prometheus-operator/prometheus-config-reloader
-      tag: v0.66.0
+      tag: v0.67.0
       # When digest is set to a non-empty value, images will be pulled by digest (regardless of tag value).
       digest: ""
       pullPolicy: IfNotPresent
@@ -486,6 +486,11 @@ server:
   ## Use a StatefulSet if replicaCount needs to be greater than 1 (see below)
   ##
   replicaCount: 1
+
+  ## Number of old history to retain to allow rollback
+  ## Default Kubernetes value is set to 10
+  ##
+  revisionHistoryLimit: 10
 
   ## Annotations to be added to deployment
   ##
@@ -1133,7 +1138,7 @@ extraManifests: []
 alertmanager:
   ## If false, alertmanager will not be installed
   ##
-  enabled: false
+  enabled: true
 
   persistence:
     size: 2Gi
@@ -1172,7 +1177,7 @@ prometheus-node-exporter:
 prometheus-pushgateway:
   ## If false, pushgateway will not be installed
   ##
-  enabled: false
+  enabled: true
 
   # Optional service annotations
   serviceAnnotations:
