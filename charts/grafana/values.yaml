@@ -197,12 +197,6 @@ serviceMonitor:
   relabelings: []
   targetLabels: []
 
-extraExposePorts: []
- # - name: keycloak
- #   port: 8080
- #   targetPort: 8080
- #   type: ClusterIP
-
 # overrides pod.spec.hostAliases in the grafana deployment's pods
 hostAliases: []
   # - ip: "1.2.3.4"
@@ -615,7 +609,7 @@ sidecar:
     seccompProfile:
       type: RuntimeDefault
   # skipTlsVerify Set to true to skip tls verification for kube api calls
-  # skipTlsVerify: true
+  skipTlsVerify: true
   enableUniqueFilenames: false
   readinessProbe: {}
   livenessProbe: {}
