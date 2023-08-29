@@ -9,19 +9,6 @@ global:
     # Pull secret for all components, can be overridden individually
     imagePullSecret: ""
 
-selenium-grid:
-  chromeNodes:
-    replicas: 2
-    disable-dev-shm-usage: true
-    #extraVolumeMounts:
-    #- name: dshm
-    #  mountPath: /dev/shm
-    #extraVolumes:
-    #- name: dshm
-    #  emptyDir:
-    #    medium: Memory
-    #dshmVolumeSizeLimit: 2Gi
-
 # Deploy Router, Distributor, EventBus, SessionMap and Nodes separately
 isolateComponents: false
 
@@ -539,3 +526,16 @@ selenium-grid:
       limits:
         cpu: 1000m 
         memory: "2048Mi"
+
+  selenium-grid:
+    chromeNodes:
+      replicas: 1
+      disable-dev-shm-usage: true
+      #extraVolumeMounts:
+      #- name: dshm
+      #  mountPath: /dev/shm
+      #extraVolumes:
+      #- name: dshm
+      #  emptyDir:
+      #    medium: Memory
+      #dshmVolumeSizeLimit: 2Gi
