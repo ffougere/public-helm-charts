@@ -1,32 +1,6 @@
 global:
   imagePullSecrets: []
 
-rbac:
-  create: true
-  ## Use an existing ClusterRole/Role (depending on rbac.namespaced false/true)
-  # useExistingRole: name-of-some-(cluster)role
-  pspEnabled: false
-  pspUseAppArmor: false
-  namespaced: false
-  extraRoleRules: []
-  # - apiGroups: []
-  #   resources: []
-  #   verbs: []
-  extraClusterRoleRules: []
-  # - apiGroups: []
-  #   resources: []
-  #   verbs: []
-serviceAccount:
-  create: true
-  name:
-  nameTest:
-  ## ServiceAccount labels.
-  labels: {}
-## Service account annotations. Can be templated.
-#  annotations:
-#    eks.amazonaws.com/role-arn: arn:aws:iam::123456789000:role/iam-role-name-here
-  autoMount: true
-
 replicas: 1
 
 ## Create a headless service for the deployment
@@ -42,11 +16,6 @@ autoscaling:
   targetMemory: ""
   behavior: {}
 
-## See `kubectl explain poddisruptionbudget.spec` for more
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-podDisruptionBudget: {}
-#  minAvailable: 1
-#  maxUnavailable: 1
 
 ## See `kubectl explain deployment.spec.strategy` for more
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -595,9 +564,9 @@ sidecar:
     sha: ""
   imagePullPolicy: IfNotPresent
   resources: {}
-#   limits:
-#     cpu: 100m
-#     memory: 100Mi
+   limits:
+     cpu: 100m
+     memory: 256Mi
 #   requests:
 #     cpu: 50m
 #     memory: 50Mi
@@ -975,71 +944,3 @@ imageRenderer:
   ##
   # schedulerName: "default-scheduler"
 
-networkPolicy:
-  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
-  ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to  grafana port defined.
-  ## When true, grafana will accept connections from any source
-  ## (with the correct destination port).
-  ##
-  ingress: true
-  ## @param networkPolicy.ingress When true enables the creation
-  ## an ingress network policy
-  ##
-  allowExternal: true
-  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
-  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
-  ## and that match other criteria, the ones that have the good label, can reach the grafana.
-  ## But sometimes, we want the grafana to be accessible to clients from other namespaces, in this case, we can use this
-  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
-  ##
-  ## Example:
-  ## explicitNamespacesSelector:
-  ##   matchLabels:
-  ##     role: frontend
-  ##   matchExpressions:
-  ##    - {key: role, operator: In, values: [frontend]}
-  ##
-  explicitNamespacesSelector: {}
-  ##
-  ##
-  ##
-  ##
-  ##
-  ##
-  egress:
-    ## @param networkPolicy.egress.enabled When enabled, an egress network policy will be
-    ## created allowing grafana to connect to external data sources from kubernetes cluster.
-    enabled: false
-    ##
-    ## @param networkPolicy.egress.ports Add individual ports to be allowed by the egress
-    ports: []
-    ## Add ports to the egress by specifying - port: <port number>
-    ## E.X.
-    ## ports:
-      ## - port: 80
-      ## - port: 443
-  ##
-  ##
-  ##
-  ##
-  ##
-  ##
-
-# Enable backward compatibility of kubernetes where version below 1.13 doesn't have the enableServiceLinks option
-enableKubeBackwardCompatibility: false
-useStatefulSet: false
-# Create a dynamic manifests via values:
-extraObjects: []
-  # - apiVersion: "kubernetes-client.io/v1"
-  #   kind: ExternalSecret
-  #   metadata:
-  #     name: grafana-secrets
-  #   spec:
-  #     backendType: gcpSecretsManager
-  #     data:
-  #       - key: grafana-admin-password
-  #         name: adminPassword

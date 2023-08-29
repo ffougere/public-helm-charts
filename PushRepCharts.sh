@@ -17,7 +17,7 @@ cd /appli/ffougere-repo/public-helm-charts/public-helm-charts/
 helm package charts/selenium3
 helm repo index --url https://github.com/ffougere/public-helm-charts/charts --merge index.yaml .
 git add .
-git commit -m "selenium new 4"
+git commit -m "selenium new 5"
 git push
 git status
 
