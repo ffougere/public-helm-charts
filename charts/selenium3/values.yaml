@@ -1,11 +1,11 @@
 global:
   seleniumGrid:
     # Image tag for all selenium components
-    #imageTag: 4.10.0-20230607
-    imageTag: 4.9.0
+    imageTag: 4.10.0-20230607
+    #imageTag: 4.9.0
     # Image tag for browser's nodes
-    #nodesImageTag: 4.10.0-20230607
-    nodesImageTag: 4.9.0
+    nodesImageTag: 4.10.0-20230607
+    #nodesImageTag: 4.9.0
     # Pull secret for all components, can be overridden individually
     imagePullSecret: ""
 
