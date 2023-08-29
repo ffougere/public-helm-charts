@@ -237,38 +237,12 @@ hub:
   # Priority class name for selenium-hub pods
   priorityClassName: ""
 
-# Keda scaled object configuration
-autoscaling:
-  # Enable autoscaling. Implies installing KEDA
-  enabled: false
-  # Enable autoscaling without automatically installing KEDA
-  enableWithExistingKEDA: false
-  # Which typ of KEDA scaling to use: job or deployment
-  scalingType: job
-  # Annotations for KEDA resources: ScaledObject and ScaledJob
-  annotations:
-    helm.sh/hook: post-install,post-upgrade
-  # Options for KEDA ScaledJobs
-  scaledJobOptions:
-    pollingInterval: 10
-    scalingStrategy:
-      strategy: accurate
-  deregisterLifecycle:
-    preStop:
-      exec:
-        command:
-          - bash
-          - -c
-          - |
-            curl -X POST 127.0.0.1:5555/se/grid/node/drain --header 'X-REGISTRATION-SECRET;' && \
-            while curl 127.0.0.1:5555/status; do sleep 1; done;
-
 # Configuration for chrome nodes
 chromeNode:
   enabled: true
   deploymentEnabled: true
   # Number of chrome nodes
-  replicas: 2
+  replicas: 1
   # Image of chrome nodes
   #imageName: selenium/node-chrome
   image: selenium/node-chrome:114.0
@@ -510,7 +484,17 @@ selenium-grid:
 
   chromeNode:
     # Number of chrome nodes
-    replicas: 2
+    replicas: 1
+    disable-dev-shm-usage: true
+
+    #extraVolumeMounts:
+    #- name: dshm
+    #  mountPath: /dev/shm
+    #extraVolumes:
+    #- name: dshm
+    #  emptyDir:
+    #    medium: Memory
+    #dshmVolumeSizeLimit: 2Gi
     resources:
       limits:
         cpu: 2000m # 2 vCPU
@@ -526,16 +510,3 @@ selenium-grid:
       limits:
         cpu: 1000m 
         memory: "2048Mi"
-
-  selenium-grid:
-    chromeNodes:
-      replicas: 1
-      disable-dev-shm-usage: true
-      #extraVolumeMounts:
-      #- name: dshm
-      #  mountPath: /dev/shm
-      #extraVolumes:
-      #- name: dshm
-      #  emptyDir:
-      #    medium: Memory
-      #dshmVolumeSizeLimit: 2Gi
