@@ -15,7 +15,18 @@ isolateComponents: false
 ingress:
   # Enable or disable ingress resource
   enabled: false
+  # Name of ingress class to select which controller will implement ingress resource
+  className: ""
+  # Custom annotations for ingress resource
+  annotations: {}
+  # Default host for the ingress resource
+  #hostname: selenium-grid.local
+  hostname: selenium2.itblast.ovh
 
+
+basicAuth:
+      # Enable or disable basic auth
+      enabled: false
 
 # Configuration for isolated components (applied only if `isolateComponents: true`)
 components:
