@@ -460,10 +460,10 @@ selenium-grid:
   hub:
     nameOverride: selenium-selenium-hub
     #replicas: 2
-    livenessProbe:
-      path: /wd/hd/status
-    readinessProbe:
-      path: /wd/hd/status
+    #livenessProbe:
+    #  path: /wd/hd/status
+    #readinessProbe:
+    #  path: /wd/hd/status
 
   chromeNode:
     # Number of chrome nodes
