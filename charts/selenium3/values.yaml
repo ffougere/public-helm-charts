@@ -145,31 +145,14 @@ components:
   # Custom sub path for all components
   subPath: /
 
-  # Custom environment variables for all components
-  extraEnvironmentVariables:
-    # - name: SE_JAVA_OPTS
-    #   value: "-Xmx512m"
-    # - name:
-    #   valueFrom:
-    #     secretKeyRef:
-    #       name: secret-name
-    #       key: secret-key
-
-  # Custom environment variables by sourcing entire configMap, Secret, etc. for all components
-  extraEnvFrom:
-    # - configMapRef:
-    #   name: proxy-settings
-    # - secretRef:
-    #   name: mysecret
-
 # Configuration for selenium hub deployment (applied only if `isolateComponents: false`)
 hub:
   nameOverride: selenium-selenium-hub
   # Selenium Hub image name
   imageName: selenium/hub
   # Selenium Hub image tag (this overwrites global.seleniumGrid.imageTag parameter)
-  # imageTag: 4.10.0-20230607
-  imageTag: 4.9.0
+  imageTag: 4.10.0-20230607
+  #imageTag: 4.9.0
   # Image pull policy (see https://kubernetes.io/docs/concepts/containers/images/#updating-images)
   imagePullPolicy: IfNotPresent
   # Image pull secret (see https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
