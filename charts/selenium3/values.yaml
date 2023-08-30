@@ -12,6 +12,11 @@ global:
 # Deploy Router, Distributor, EventBus, SessionMap and Nodes separately
 isolateComponents: false
 
+ingress:
+  # Enable or disable ingress resource
+  enabled: false
+
+
 # Configuration for isolated components (applied only if `isolateComponents: true`)
 components:
 
