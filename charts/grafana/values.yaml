@@ -477,13 +477,7 @@ sidecar:
     tag: 1.24.3
     sha: ""
   imagePullPolicy: IfNotPresent
-  resources: {}
-   limits:
-     cpu: 100m
-     memory: 256Mi
-#   requests:
-#     cpu: 50m
-#     memory: 50Mi
+  
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -831,30 +825,3 @@ imageRenderer:
     limitEgress: false
     # Allow additional services to access image-renderer (eg. Prometheus operator when ServiceMonitor is enabled)
     extraIngressSelectors: []
-  resources: {}
-#   limits:
-#     cpu: 100m
-#     memory: 100Mi
-#   requests:
-#     cpu: 50m
-#     memory: 50Mi
-  ## Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  #
-  nodeSelector: {}
-
-  ## Tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-
-  ## Affinity for pod assignment (evaluated as template)
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ##
-  affinity: {}
-
-  ## Use an alternate scheduler, e.g. "stork".
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  # schedulerName: "default-scheduler"
-
