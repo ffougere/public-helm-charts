@@ -28,7 +28,7 @@ serviceAccount:
 # Configure the ingress resource to access the Grid installation.
 ingress:
   # Enable or disable ingress resource
-  enabled: true
+  enabled: treu
   # Name of ingress class to select which controller will implement ingress resource
   className: ""
   # Custom annotations for ingress resource

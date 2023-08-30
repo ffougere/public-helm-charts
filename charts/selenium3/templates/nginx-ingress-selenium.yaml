@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: "selenium.itblast.ovh2"
+  - host: "selenium2.itblast.ovh"
     http:
       paths:
       - pathType: Prefix
