@@ -47,26 +47,12 @@ image:
   sha: ""
   pullPolicy: IfNotPresent
 
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Can be templated.
-  ##
-  pullSecrets: []
-  #   - myRegistrKeySecretName
-
 testFramework:
   enabled: true
   image: docker.io/bats/bats
   tag: "v1.4.1"
   imagePullPolicy: IfNotPresent
   securityContext: {}
-
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 472
-  runAsGroup: 472
-  fsGroup: 472
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
@@ -75,30 +61,6 @@ containerSecurityContext:
     - ALL
   seccompProfile:
     type: RuntimeDefault
-
-# Enable creating the grafana configmap
-createConfigmap: true
-
-# Extra configmaps to mount in grafana pods
-# Values are templated.
-extraConfigmapMounts: []
-  # - name: certs-configmap
-  #   mountPath: /etc/grafana/ssl/
-  #   subPath: certificates.crt # (optional)
-  #   configMap: certs-configmap
-  #   readOnly: true
-
-
-extraEmptyDirMounts: []
-  # - name: provisioning-notifiers
-  #   mountPath: /etc/grafana/provisioning/notifiers
-
-
-# Apply extra labels to common labels.
-extraLabels: {}
-
-## Assign a PriorityClassName to pods if set
-# priorityClassName:
 
 downloadDashboardsImage:
   repository: docker.io/curlimages/curl
@@ -122,12 +84,6 @@ downloadDashboards:
   #    configMapKeyRef:
   #      name: configmap-name
   #      key: value_key
-
-## Pod Annotations
-# podAnnotations: {}
-
-## Pod Labels
-# podLabels: {}
 
 podPortName: grafana
 gossipPortName: gossip
@@ -173,18 +129,19 @@ hostAliases: []
   #     - "my.host.com"
 
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  labels: {}
+  labels:
   path: /
 
   # pathType is only for k8s >= 1.1=
   pathType: Prefix
 
   hosts:
-    - chart-example.local
+    #- chart-example.local
+    - grafana2.itblast.ovh
   ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
   extraPaths: []
   tls: []
@@ -192,38 +149,6 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-#  limits:
-#    cpu: 100m
-#    memory: 128Mi
-#  requests:
-#    cpu: 100m
-#    memory: 128Mi
-
-## Node labels for pod assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-#
-nodeSelector: {}
-
-## Tolerations for pod assignment
-## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Affinity for pod assignment (evaluated as template)
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
-
-## Topology Spread Constraints
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-##
-topologySpreadConstraints: []
-
-## Additional init containers (evaluated as template)
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-##
-extraInitContainers: []
 
 ## Enable an Specify container in extraContainers. This is meant to allow adding an authentication proxy to a grafana pod
 extraContainers: ""
@@ -256,7 +181,7 @@ extraContainerVolumes: []
 ##
 persistence:
   type: pvc
-  enabled: false
+  enabled: true
   # storageClassName: default
   accessModes:
     - ReadWriteOnce
@@ -271,17 +196,6 @@ persistence:
   # existingClaim:
   ## Extra labels to apply to a PVC.
   extraPvcLabels: {}
-
-  ## If persistence is not enabled, this allows to mount the
-  ## local storage in-memory to improve performance
-  ##
-  inMemory:
-    enabled: false
-    ## The maximum usage on memory medium EmptyDir would be
-    ## the minimum value between the SizeLimit specified
-    ## here and the sum of memory limits of all containers in a pod
-    ##
-    # sizeLimit: 300Mi
 
 initChownData:
   ## If false, data ownership will not be reset at startup
