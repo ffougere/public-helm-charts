@@ -1,5 +1,6 @@
 # Selenium grid
 https://github.com/SeleniumHQ/docker-selenium/blob/selenium-grid-0.15.8/charts/selenium-grid/values.yaml
+https://github.com/SeleniumHQ/docker-selenium/tree/selenium-grid-0.15.8/charts/selenium-grid/templates
 
 # URL Resources
 KEDA : https://medium.com/@gururajhm/auto-scaling-selenium-grid-in-kubernetes-using-keda-azure-kubernetes-service-3244dc00a9a6
