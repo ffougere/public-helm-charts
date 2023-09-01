@@ -456,7 +456,7 @@ selenium-grid:
     #- name: dshm
     #  emptyDir:
     #    medium: Memory
-    #dshmVolumeSizeLimit: 2Gi
+    dshmVolumeSizeLimit: 0Gi
     resources:
       requests:
         cpu: 100m # 0.1 vCPU
