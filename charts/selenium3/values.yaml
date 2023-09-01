@@ -37,29 +37,8 @@ components:
     # Distributor image tag (this overwrites global.seleniumGrid.imageTag parameter)
     # imageTag: 4.10.0-20230607
 
-    # Image pull policy (see https://kubernetes.io/docs/concepts/containers/images/#updating-images)
     imagePullPolicy: IfNotPresent
-    # Image pull secret (see https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
     imagePullSecret: ""
-
-    # Custom annotations for Distributor pods
-    annotations: {}
-    # Distributor port
-    port: 5553
-    # Resources for Distributor container
-    resources: {}
-    # SecurityContext for Distributor container
-    securityContext: {}
-    # Kubernetes service type (see https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
-    serviceType: ClusterIP
-    # Custom annotations for Distributor service
-    serviceAnnotations: {}
-    # Tolerations for Distributor pods
-    tolerations: []
-    # Node selector for Distributor pods
-    nodeSelector: {}
-    # Priority class name for Distributor pods
-    priorityClassName: ""
 
   # Configuration for Event Bus component
   eventBus:
@@ -219,21 +198,6 @@ hub:
     # - secretRef:
     #   name: mysecret
   # Resources for selenium-hub container
-  resources: {}
-  # SecurityContext for selenium-hub container
-  securityContext: {}
-  # Kubernetes service type (see https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
-  serviceType: ClusterIP
-  # Set specific loadBalancerIP when serviceType is LoadBalancer (see https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer)
-  loadBalancerIP: ""
-  # Custom annotations for Selenium Hub service
-  serviceAnnotations: {}
-  # Tolerations for selenium-hub pods
-  tolerations: []
-  # Node selector for selenium-hub pods
-  nodeSelector: {}
-  # Priority class name for selenium-hub pods
-  priorityClassName: ""
 
 # Configuration for chrome nodes
 chromeNode:
@@ -271,8 +235,8 @@ chromeNode:
       memory: "4000Mi"
   
   extraEnvironmentVariables:
-    # - name: SE_JAVA_OPTS
-    #   value: "-Xmx512m"
+    - name: SE_JAVA_OPTS
+      value: "-Xmx900m"
     # - name:
     #   valueFrom:
     #     secretKeyRef:
@@ -288,7 +252,7 @@ chromeNode:
     # Custom annotations for service
     annotations: {}
   # Size limit for DSH volume mounted in container (if not set, default is "1Gi")
-  dshmVolumeSizeLimit: 1Gi
+  dshmVolumeSizeLimit: 0Gi
   # Priority class name for chrome-node pods
   priorityClassName: ""
 
@@ -494,6 +458,9 @@ selenium-grid:
     #    medium: Memory
     #dshmVolumeSizeLimit: 2Gi
     resources:
+      requests:
+        cpu: 100m # 0.1 vCPU
+        memory: "256Mi"
       limits:
         cpu: 2000m # 2 vCPU
         memory: "4000Mi"
