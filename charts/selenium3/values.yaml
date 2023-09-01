@@ -23,7 +23,6 @@ ingress:
   #hostname: selenium-grid.local
   hostname: selenium2.itblast.ovh
 
-
 basicAuth:
       # Enable or disable basic auth
       enabled: false
@@ -245,7 +244,7 @@ chromeNode:
   # Image of chrome nodes
   #imageName: selenium/node-chrome
   image: selenium/node-chrome:114.0
-       
+  disable-dev-shm-usage: true
   # Image pull policy (see https://kubernetes.io/docs/concepts/containers/images/#updating-images)
   imagePullPolicy: IfNotPresent
   # Image pull secret (see https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
