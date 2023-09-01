@@ -252,7 +252,7 @@ chromeNode:
     # Custom annotations for service
     annotations: {}
   # Size limit for DSH volume mounted in container (if not set, default is "1Gi")
-  dshmVolumeSizeLimit: 0Gi
+  dshmVolumeSizeLimit: ""
   # Priority class name for chrome-node pods
   priorityClassName: ""
 
@@ -335,15 +335,7 @@ firefoxNode:
     #   name: mysecret
   # Service configuration
   service:
-    # Create a service for node
-    enabled: true
-    # Service type
     type: ClusterIP
-    # Custom annotations for service
-    annotations: {}
-  # Size limit for DSH volume mounted in container (if not set, default is "1Gi")
-
-  dshmVolumeSizeLimit: 2Gi
 
   # Priority class name for firefox-node pods
   priorityClassName: ""
@@ -372,9 +364,6 @@ edgeNode:
   imagePullPolicy: IfNotPresent
   imagePullSecret: ""
 
-  volumeMounts:
-    - mountPath: /dev/shm
-      name: dshm
   env:
   - name: HUB_PORT_4444_TCP_PORT
     value: "4444"
@@ -456,7 +445,7 @@ selenium-grid:
     #- name: dshm
     #  emptyDir:
     #    medium: Memory
-    dshmVolumeSizeLimit: 0Gi
+    dshmVolumeSizeLimit: ""
     resources:
       requests:
         cpu: 100m # 0.1 vCPU
