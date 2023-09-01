@@ -1,0 +1,13 @@
+apiVersion: v2
+name: MySQL Operator
+description: MySQL Operator
+type: application
+version: 2.0.0
+dependencies:
+#- name: selenium-grid # local
+#- name: selenium-grid
+#  version: 1.2.4
+#  repository: https://artifacthub.io/packages/helm/selenium3/
+- name: mysql-operator
+  version: v0.13.2
+  repository: https://mysql.github.io/mysql-operator/

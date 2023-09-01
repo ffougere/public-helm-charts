@@ -1,0 +1,13 @@
+apiVersion: v2
+name: selenium3
+description: Selenium Grid
+type: application
+version: 2.0.0
+dependencies:
+#- name: selenium-grid # local
+#- name: selenium-grid
+#  version: 1.2.4
+#  repository: https://artifacthub.io/packages/helm/selenium3/
+- name: selenium-grid
+  version: 0.20.0
+  repository: https://www.selenium.dev/docker-selenium
