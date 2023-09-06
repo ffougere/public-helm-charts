@@ -1,0 +1,33 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: activemq-broker
+  namespace: activemq-artemis-operator
+spec:
+  env:
+    - name: JDK_JAVA_OPTIONS
+      value: |
+        -XshowSettings:system      
+        -Dbrokerconfig.transaction-timeout=0 
+        -Dbrokerconfig.globalMaxSize=1000000
+        -Dbrokerconfig.security-enabled=false
+        -Dhawtio.authenticationEnabled=false
+  deploymentPlan:
+    size: 2 #cluster mode deployment
+    image: placeholder
+    
+    persistenceEnabled: true 
+  acceptors: # (2)
+    - name: amqp
+      protocols: amqp
+      port: 5672
+      connectionsAllowed: 5
+
+  console:
+    expose: true
+    sslEnabled: false
+    enableMetricsPlugin: true
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
