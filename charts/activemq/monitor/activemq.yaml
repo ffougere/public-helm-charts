@@ -1,12 +1,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: acticemq
-  namespace: activemq
+  name: activemq
+  namespace: activemq-artemis-operator
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: acticemq
+      app.kubernetes.io/name: activemq
   podMetricsEndpoints:
     - port: web
   namespaceSelector:
