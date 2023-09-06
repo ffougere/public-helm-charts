@@ -10,5 +10,5 @@ resources:
   - monitor
   - namespace.yaml
   - operator.yaml
-  - service.yaml
+  #- service.yaml
   - service_account.yaml
