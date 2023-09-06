@@ -1,12 +1,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: prometheus
+  name: acticemq
   namespace: activemq
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: prometheus
+      app.kubernetes.io/name: acticemq
   podMetricsEndpoints:
     - port: web
   namespaceSelector:
