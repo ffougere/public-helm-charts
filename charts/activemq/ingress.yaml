@@ -1,0 +1,26 @@
+Fabrice Fougère <fabrice.fougere@gmail.com>
+	
+11:11 (il y a 0 minute)
+	
+À moi
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: activemq
+  namespace: activemq-artemis-operator
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - activemq.itblast.ovh
+  rules:
+    - host: activemq.itblast.ovh
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: activemq
+                port:
+                  name: web

@@ -1,0 +1,12 @@
+# Note to make this work, the original cluster role name
+# and the original roleRef name must be the same
+# otherwise it won't do substitute
+nameReference:
+- kind: ClusterRole
+  version: v1
+  group: rbac.authorization.k8s.io
+  fieldSpecs:
+  - kind: ClusterRoleBinding
+    version: v1
+    group: rbac.authorization.k8s.io
+    path: roleRef/name
