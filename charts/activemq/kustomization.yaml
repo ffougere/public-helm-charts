@@ -4,9 +4,10 @@ resources:
   #- git::https://github.com/artemiscloud/activemq-artemis-operator.git?ref=v2.30.0
   #- https://github.com/artemiscloud/activemq-artemis-operator/?ref=v1.0.6
   #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd
-  - https://github.com/artemiscloud/activemq-artemis-operator/blob/main/config/default?ref=v2.30.0
+  #- https://github.com/artemiscloud/activemq-artemis-operator/blob/main/config/default?ref=v2.30.0
   #- https://github.com/artemiscloud/activemq-artemis-operator/
   #- crds
+  - https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd
   #- https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.67.1/bundle.yaml
   #- namespace.yaml
   #- monitor
