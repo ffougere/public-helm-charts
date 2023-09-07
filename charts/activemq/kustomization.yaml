@@ -23,9 +23,8 @@ resources:
   #- cluster_role_binding.yaml
   #- election_role.yaml
   #- election_role_binding.yaml
-  #- argocdyaml
   #- ingress.yaml
   #- operator.yaml
   #- service.yaml
-  #- service_account.yaml
-  #- activemq-artemis-broker.yaml
+  - service_account.yaml
+  - activemq-artemis-broker.yaml
