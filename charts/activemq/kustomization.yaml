@@ -9,7 +9,8 @@ resources:
   #- crds
   #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd
   #- https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.67.1/bundle.yaml
-  - https://github.com/artemiscloud/activemq-artemis-operator/tree/main/deploy/service_account.yaml
+  - #https://github.com/artemiscloud/activemq-artemis-operator/tree/main/deploy/service_account.yaml
+  - https://github.com/jetstack/kustomize-cert-manager-demo.git
   #- namespace.yaml
   #- monitor
   #- cluster_role.yaml
