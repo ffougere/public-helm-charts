@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   #- crds
   #- https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.67.1/bundle.yaml
-  - https://github.com/artemiscloud/activemq-artemis-operator.git
+  - https://github.com/artemiscloud/activemq-artemis-operator
   - namespace.yaml
   #- monitor
   #- cluster_role.yaml
