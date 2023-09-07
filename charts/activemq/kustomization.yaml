@@ -7,8 +7,9 @@ resources:
   #- https://github.com/artemiscloud/activemq-artemis-operator/blob/main/config/default?ref=v2.30.0
   #- https://github.com/artemiscloud/activemq-artemis-operator/
   #- crds
-  - https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd
+  #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd
   #- https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.67.1/bundle.yaml
+  - https://github.com/artemiscloud/activemq-artemis-operator/tree/main/deploy/service_account.yaml
   #- namespace.yaml
   #- monitor
   #- cluster_role.yaml
@@ -16,8 +17,8 @@ resources:
   #- election_role.yaml
   #- election_role_binding.yaml
   #- argocdyaml
-  - ingress.yaml
+  #- ingress.yaml
   #- operator.yaml
 #- service.yaml
   #- service_account.yaml
-  - activemq-artemis-broker.yaml
+  #- activemq-artemis-broker.yaml
