@@ -1,9 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - crds
+  #- crds
   #- https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.67.1/bundle.yaml
-  #- https://github.com/artemiscloud/activemq-artemis-operator
+  - https://github.com/artemiscloud/activemq-artemis-operator
   - namespace.yaml
   #- monitor
   #- cluster_role.yaml
@@ -12,7 +12,7 @@ resources:
   #- election_role_binding.yaml
   #- argocdyaml
   - ingress.yaml
-  - operator.yaml
+  #- operator.yaml
 #- service.yaml
   #- service_account.yaml
   - activemq-artemis-broker.yaml
