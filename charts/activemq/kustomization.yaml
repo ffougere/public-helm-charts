@@ -1,31 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
-  #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/certmanager
-  #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd?ref=v1.0.15
-  - https://github.com/codefresh-contrib/kustomize-sample-app/tree/master/base
+- https://github.com/codefresh-contrib/kustomize-sample-app/tree/master/base
+#- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/certmanager
+#- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd?ref=v1.0.15
+
 resources:
-  #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd?ref=v2.30.0
-  #- https://github.com/argoproj/argo-cd/tree/master/manifests/ha/cluster-install
-  #- git::https://github.com/artemiscloud/activemq-artemis-operator.git?ref=v2.30.0
-  #- https://github.com/artemiscloud/activemq-artemis-operator/?ref=v1.0.6
-  #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd
-  #- https://github.com/artemiscloud/activemq-artemis-operator/blob/main/config/default?ref=v2.30.0
-  #- https://github.com/artemiscloud/activemq-artemis-operator/
-  #- crds
-  #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd
-  #- https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.67.1/bundle.yaml
-  - #https://github.com/artemiscloud/activemq-artemis-operator/tree/main/deploy/service_account.yaml
-  #- https://github.com/jetstack/kustomize-cert-manager-demo.git
-  #- https://github.com/kyverno/kyverno/tree/main/charts/kyverno
-  #- namespace.yaml
-  #- monitor
-  #- cluster_role.yaml
-  #- cluster_role_binding.yaml
-  #- election_role.yaml
-  #- election_role_binding.yaml
-  #- ingress.yaml
-  #- operator.yaml
-  #- service.yaml
-  - service_account.yaml
-  - activemq-artemis-broker.yaml
+- service_account.yaml
+- activemq-artemis-broker.yaml
