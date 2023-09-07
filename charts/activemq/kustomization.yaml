@@ -1,7 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd?ref=v2.30.0
+  #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd?ref=v2.30.0
+  - https://github.com/argoproj/argo-cd/tree/master/manifests/ha/cluster-install
   #- git::https://github.com/artemiscloud/activemq-artemis-operator.git?ref=v2.30.0
   #- https://github.com/artemiscloud/activemq-artemis-operator/?ref=v1.0.6
   #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd
