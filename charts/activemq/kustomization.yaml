@@ -6,7 +6,6 @@ resources:
   - operator/crds/broker_activemqartemissecurity_crd.yaml
   - operator/crds/broker_activemqartemisscaledown_crd.yaml
   - operator/crds/broker_activemqartemis_crd.yaml
-  #- operator/crds
   - operator/service_account.yaml
   - operator/role.yaml
   - operator/role_binding.yaml
@@ -15,5 +14,6 @@ resources:
   - operator/operator_config.yaml
   - operator/operator.yaml
   - app/activemq_artemis_broker.yaml
-  #- virtualservice.yaml
-  - ingress.yaml
+  - app/namespace.yaml
+  - app/ingress.yaml
+  #- app/virtualservice.yaml
