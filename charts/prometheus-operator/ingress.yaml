@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - prometheus-gms.amadeus-hospitality.com
+  rules:
+    - host: prometheus-gms.amadeus-hospitality.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus
+                port:
+                  name: web
