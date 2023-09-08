@@ -7,7 +7,6 @@ kind: Kustomization
 #- https://raw.githubusercontent.com/artemiscloud/activemq-artemis-operator/v1.0.15/deploy/operator.yaml
 resources:
 - namespace.yaml
-- activemq-artemis-broker.yaml
 - ingress.yaml
 - deploy/service_account.yaml
 - deploy/role.yaml
@@ -19,3 +18,4 @@ resources:
 - deploy/cluster_role.yaml
 - deploy/cluster_role_binding.yaml
 - deploy/crds
+- activemq-artemis-broker.yaml
