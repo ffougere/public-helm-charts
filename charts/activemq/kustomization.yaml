@@ -8,5 +8,6 @@ kind: Kustomization
 resources:
 - namespace.yaml
 - deploy
+- deploy/crds
 - activemq-artemis-broker.yaml
 - ingress.yaml
