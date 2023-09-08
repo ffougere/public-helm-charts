@@ -23,7 +23,6 @@ spec:
       protocols: amqp
       port: 5672
       connectionsAllowed: 5
-
     # DATA PERSISTENCE : ALL parameters required
     journalType: aio #nio
     messageMigration: true
@@ -31,15 +30,8 @@ spec:
     podSecurityContext:
       fsGroup: 0
       fsGroupChangePolicy: "OnRootMismatch"
-    
     storage:
-      size: 16Gi
-
+      size: 2Gi
   console:
     expose: true
     sslEnabled: false
-    enableMetricsPlugin: true
-    resources:
-      limits:
-        cpu: "500m"
-        memory: "1024Mi"
