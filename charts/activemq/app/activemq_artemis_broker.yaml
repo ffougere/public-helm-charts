@@ -20,7 +20,7 @@ spec:
     # DATA PERSISTENCE : ALL parameters required
     journalType: aio #nio
     messageMigration: true
-      podSecurityContext:
+    podSecurityContext:
       fsGroup: 0
       fsGroupChangePolicy: "OnRootMismatch"
     storage:
