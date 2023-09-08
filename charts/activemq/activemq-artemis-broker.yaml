@@ -13,15 +13,27 @@ spec:
         -Dbrokerconfig.security-enabled=false
         -Dhawtio.authenticationEnabled=false
   deploymentPlan:
-    size: 2 #cluster mode deployment
-    image: placeholder
-    
+    size: 1 #cluster mode deployment
+    #image: placeholder
+    image: quay.io/artemiscloud/activemq-artemis-broker-kubernetes:artemis.2.27.0
+
     persistenceEnabled: true 
   acceptors: # (2)
     - name: amqp
       protocols: amqp
       port: 5672
       connectionsAllowed: 5
+
+    # DATA PERSISTENCE : ALL parameters required
+    journalType: aio #nio
+    messageMigration: true
+    persistenceEnabled: true
+    podSecurityContext:
+      fsGroup: 0
+      fsGroupChangePolicy: "OnRootMismatch"
+    
+    storage:
+      size: 16Gi
 
   console:
     expose: true
