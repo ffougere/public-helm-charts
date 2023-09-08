@@ -1,0 +1,15 @@
+# Dependency Licenses
+
+This directory contains license files of projects that the artemiscloud operator
+project depends on.
+
+Each license file should be named in the following pattern:
+
+LICENSE-[go module name].txt
+
+If [go module name] contains forward slashes(/) they should be replaced with
+hyphens. For example the license file name for module software.sslmate.com/src/go-pkcs12
+should be:
+
+LICENSE-software.sslmate.com-src-go-pkcs12.txt
+
