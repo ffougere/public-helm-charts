@@ -1,21 +1,19 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-#bases:
-#- https://github.com/codefresh-contrib/kustomize-sample-app/tree/master/base
-#- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/certmanager
-#- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd/?ref=v1.0.15
-#- https://raw.githubusercontent.com/artemiscloud/activemq-artemis-operator/v1.0.15/deploy/operator.yaml
 resources:
-- namespace.yaml
-- ingress.yaml
-- deploy/service_account.yaml
-- deploy/role.yaml
-- deploy/role_binding.yaml
-- deploy/operator.yaml
-- deploy/operator_config.yaml
-- deploy/election_role.yaml
-- deploy/election_role_binding.yaml
-- deploy/cluster_role.yaml
-- deploy/cluster_role_binding.yaml
-- deploy/crds
-- app
+  #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/deploy//crds/broker_activemqartemissecurity_crd.yaml
+  - operator/crds/broker_activemqartemisaddress_crd.yaml
+  - operator/crds/broker_activemqartemissecurity_crd.yaml
+  - operator/crds/broker_activemqartemisscaledown_crd.yaml
+  - operator/crds/broker_activemqartemis_crd.yaml
+  #- operator/crds
+  - operator/service_account.yaml
+  - operator/role.yaml
+  - operator/role_binding.yaml
+  - operator/election_role.yaml
+  - operator/election_role_binding.yaml
+  - operator/operator_config.yaml
+  - operator/operator.yaml
+  - activemq_artemis_broker.yaml
+  #- virtualservice.yaml
+  - ingress.yaml
