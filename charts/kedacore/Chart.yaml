@@ -3,7 +3,7 @@ dependencies:
 - name: kedacore
   version: 2.11.2
   #repository: https://kedacore.github.io/charts/keda
-  repository: https://github.com/kedacore/
+  repository: https://github.com/kedacore
 name: kedacore
 description: KEDA
 version: 1.0.0
