@@ -1,827 +1,625 @@
-global:
-  imagePullSecrets: []
-
-replicas: 1
-
-## Create a headless service for the deployment
-headlessService: false
-
-## Create HorizontalPodAutoscaler object for deployment type
-#
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 5
-  targetCPU: "60"
-  targetMemory: ""
-  behavior: {}
-
-
-## See `kubectl explain deployment.spec.strategy` for more
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-deploymentStrategy:
-  type: RollingUpdate
-
-readinessProbe:
-  httpGet:
-    path: /api/health
-    port: 3000
-
-livenessProbe:
-  httpGet:
-    path: /api/health
-    port: 3000
-  initialDelaySeconds: 60
-  timeoutSeconds: 30
-  failureThreshold: 10
-
-## Use an alternate scheduler, e.g. "stork".
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-##
-# schedulerName: "default-scheduler"
-
 image:
-  repository: docker.io/grafana/grafana
-  # Overrides the Grafana image tag whose default is the chart appVersion
-  tag: ""
-  sha: ""
-  pullPolicy: IfNotPresent
+  keda:
+    # -- Image name of KEDA operator
+    repository: ghcr.io/kedacore/keda
+    # -- Image tag of KEDA operator. Optional, given app version of Helm chart is used by default
+    tag: ""
+  metricsApiServer:
+    repository: ghcr.io/kedacore/keda-metrics-apiserver
+    tag: ""
+  webhooks:
+    # -- Image name of KEDA admission-webhooks
+    repository: ghcr.io/kedacore/keda-admission-webhooks
+    # -- Image tag of KEDA admission-webhooks . Optional, given app version of Helm chart is used by default
+    tag: ""
 
-testFramework:
+clusterDomain: cluster.local
+
+crds:
+  # -- Defines whether the KEDA CRDs have to be installed or not.
+  install: true
+
+# -- Defines Kubernetes namespaces to watch to scale their workloads. Default watches all namespaces
+watchNamespace: ""
+
+# -- Name of secret to use to pull images to use to pull Docker images
+imagePullSecrets: []
+
+operator:
+  # -- Name of the KEDA operator
+  name: keda-operator
+  # -- Capability to configure the number of replicas for KEDA operator.
+  # While you can run more replicas of our operator, only one operator instance will be the leader and serving traffic.
+  # You can run multiple replicas, but they will not improve the performance of KEDA, it could only reduce downtime during a failover.
+  # Learn more in [our documentation](https://keda.sh/docs/latest/operate/cluster/#high-availability).
+  replicaCount: 1
+  # -- [Affinity] for pod scheduling for KEDA operator. Takes precedence over the `affinity` field
+  affinity: {}
+    # podAntiAffinity:
+    #   requiredDuringSchedulingIgnoredDuringExecution:
+    #   - labelSelector:
+    #       matchExpressions:
+    #       - key: app
+    #         operator: In
+    #         values:
+    #         - keda-operator
+    #     topologyKey: "kubernetes.io/hostname"
+
+metricsServer:
+  # -- Capability to configure the number of replicas for KEDA metric server.
+  # While you can run more replicas of our metric server, only one instance will used and serve traffic.
+  # You can run multiple replicas, but they will not improve the performance of KEDA, it could only reduce downtime during a failover.
+  # Learn more in [our documentation](https://keda.sh/docs/latest/operate/cluster/#high-availability).
+  replicaCount: 1
+  # use ClusterFirstWithHostNet if `useHostNetwork: true` https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+  # -- Defined the DNS policy for the metric server
+  dnsPolicy: ClusterFirst
+  # -- Enable metric server to use host network
+  useHostNetwork: false
+  # -- [Affinity] for pod scheduling for Metrics API Server. Takes precedence over the `affinity` field
+  affinity: {}
+    # podAntiAffinity:
+    #   requiredDuringSchedulingIgnoredDuringExecution:
+    #   - labelSelector:
+    #       matchExpressions:
+    #       - key: app
+    #         operator: In
+    #         values:
+    #         - keda-operator-metrics-apiserver
+    #     topologyKey: "kubernetes.io/hostname"
+
+webhooks:
+  # -- Enable admission webhooks (this feature option will be removed in v2.12)
   enabled: true
-  image: docker.io/bats/bats
-  tag: "v1.4.1"
-  imagePullPolicy: IfNotPresent
-  securityContext: {}
+  # -- Port number to use for KEDA admission webhooks. Default is 9443.
+  port: ""
+  # -- Port number to use for KEDA admission webhooks health probe
+  healthProbePort: 8081
+  # -- Enable webhook to use host network, this is required on EKS with custom CNI
+  useHostNetwork: false
+  # -- Name of the KEDA admission webhooks
+  name: keda-admission-webhooks
+  # -- Capability to configure the number of replicas for KEDA admission webhooks
+  replicaCount: 1
+  # -- [Affinity] for pod scheduling for KEDA admission webhooks. Takes precedence over the `affinity` field
+  affinity: {}
+    # podAntiAffinity:
+    #   requiredDuringSchedulingIgnoredDuringExecution:
+    #   - labelSelector:
+    #       matchExpressions:
+    #       - key: app
+    #         operator: In
+    #         values:
+    #         - keda-operator
+    #     topologyKey: "kubernetes.io/hostname"
 
-containerSecurityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
-  seccompProfile:
-    type: RuntimeDefault
+  # -- [Failure policy](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#failure-policy) to use with KEDA admission webhooks
+  failurePolicy: Ignore
 
-downloadDashboardsImage:
-  repository: docker.io/curlimages/curl
-  tag: 7.85.0
-  sha: ""
-  pullPolicy: IfNotPresent
+upgradeStrategy:
+  # -- Capability to configure [Deployment upgrade strategy] for operator
+  operator: {}
+    # type: RollingUpdate
+    # rollingUpdate:
+    #   maxUnavailable: 1
+    #   maxSurge: 1
 
-downloadDashboards:
-  env: {}
-  envFromSecret: ""
-  resources: {}
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    seccompProfile:
-      type: RuntimeDefault
-  envValueFrom: {}
-  #  ENV_NAME:
-  #    configMapKeyRef:
-  #      name: configmap-name
-  #      key: value_key
+  # -- Capability to configure [Deployment upgrade strategy] for Metrics Api Server
+  metricsApiServer: {}
+    # type: RollingUpdate
+    # rollingUpdate:
+    #   maxUnavailable: 1
+    #   maxSurge: 1
 
-podPortName: grafana
-gossipPortName: gossip
-## Deployment annotations
-# annotations: {}
+  # -- Capability to configure [Deployment upgrade strategy] for Admission webhooks
+  webhooks: {}
+    # type: RollingUpdate
+    # rollingUpdate:
+    #   maxUnavailable: 1
+    #   maxSurge: 1
 
-## Expose the grafana service to be accessed from outside the cluster (LoadBalancer service).
-## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.
-## ref: http://kubernetes.io/docs/user-guide/services/
-##
-service:
-  enabled: true
-  type: ClusterIP
-  port: 80
-  targetPort: 3000
-    # targetPort: 4181 To be used with a proxy extraContainer
-  ## Service annotations. Can be templated.
+podDisruptionBudget:
+  # -- Capability to configure [Pod Disruption Budget]
+  operator: {}
+    #  minAvailable: 1
+    #  maxUnavailable: 1
+
+  # -- Capability to configure [Pod Disruption Budget]
+  metricServer: {}
+    #  minAvailable: 1
+    #  maxUnavailable: 1
+
+  # -- Capability to configure [Pod Disruption Budget]
+  webhooks: {}
+    #  minAvailable: 1
+    #  maxUnavailable: 1
+
+# -- Custom labels to add into metadata
+additionalLabels:
+  {}
+  # foo: bar
+
+# -- Custom annotations to add into metadata
+additionalAnnotations:
+  {}
+  # foo: bar
+
+podAnnotations:
+  # -- Pod annotations for KEDA operator
+  keda: {}
+  # -- Pod annotations for KEDA Metrics Adapter
+  metricsAdapter: {}
+  # -- Pod annotations for KEDA Admission webhooks
+  webhooks: {}
+podLabels:
+  # -- Pod labels for KEDA operator
+  keda: {}
+  # -- Pod labels for KEDA Metrics Adapter
+  metricsAdapter: {}
+  # -- Pod labels for KEDA Admission webhooks
+  webhooks: {}
+
+rbac:
+  # -- Specifies whether RBAC should be used
+  create: true
+  # -- Specifies whether RBAC for CRDs should be [aggregated](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles) to default roles (view, edit, admin)
+  aggregateToDefaultRoles: false
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: keda-operator
+  # -- Specifies whether a service account should automount API-Credentials
+  automountServiceAccountToken: true
+  # -- Annotations to add to the service account
   annotations: {}
-  labels: {}
-  portName: service
-  # Adds the appProtocol field to the service. This allows to work with istio protocol selection. Ex: "http" or "tcp"
-  appProtocol: ""
 
-serviceMonitor:
-  ## If true, a ServiceMonitor CRD is created for a prometheus operator
-  ## https://github.com/coreos/prometheus-operator
-  ##
-  enabled: false
-  path: /metrics
-  #  namespace: monitoring  (defaults to use the namespace this chart is deployed to)
-  labels: {}
-  interval: 1m
-  scheme: http
-  tlsConfig: {}
-  scrapeTimeout: 30s
-  relabelings: []
-  targetLabels: []
+podIdentity:
+  activeDirectory:
+    # Set to the value of the Azure Active Directory Pod Identity
+    # See https://keda.sh/docs/concepts/authentication/#azure-pod-identity
+    # This will be set as a label on the KEDA Pod(s)
+    # -- Identity in Azure Active Directory to use for Azure pod identity
+    identity: ""
+  azureWorkload:
+    # -- Set to true to enable Azure Workload Identity usage.
+    # See https://keda.sh/docs/concepts/authentication/#azure-workload-identity
+    # This will be set as a label on the KEDA service account.
+    enabled: false
+    # Set to the value of the Azure Active Directory Client and Tenant Ids
+    # respectively. These will be set as annotations on the KEDA service account.
+    # -- Id of Azure Active Directory Client to use for authentication with Azure Workload Identity. ([docs](https://keda.sh/docs/concepts/authentication/#azure-workload-identity))
+    clientId: ""
+    # -- Id Azure Active Directory Tenant to use for authentication with for Azure Workload Identity. ([docs](https://keda.sh/docs/concepts/authentication/#azure-workload-identity))
+    tenantId: ""
+    # Set to the value of the service account token expiration duration.
+    # This will be set as an annotation on the KEDA service account.
+    # -- Duration in seconds to automatically expire tokens for the service account. ([docs](https://keda.sh/docs/concepts/authentication/#azure-workload-identity))
+    tokenExpiration: 3600
+  aws:
+    irsa:
+      # -- Specifies whether [AWS IAM Roles for Service Accounts (IRSA)](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) is to be enabled or not.
+      enabled: false
+      # -- Sets the token audience for IRSA.
+      # This will be set as an annotation on the KEDA service account.
+      audience: "sts.amazonaws.com"
+      # -- Set to the value of the ARN of an IAM role with a web identity provider.
+      # This will be set as an annotation on the KEDA service account.
+      roleArn: ""
+      # -- Sets the use of an STS regional endpoint instead of global.
+      # Recommended to use regional endpoint in almost all cases.
+      # This will be set as an annotation on the KEDA service account.
+      stsRegionalEndpoints: "true"
+      # -- Set to the value of the service account token expiration duration.
+      # This will be set as an annotation on the KEDA service account.
+      tokenExpiration: 86400
+  gcp:
+    # -- Set to true to enable GCP Workload Identity.
+    # See https://keda.sh/docs/2.10/authentication-providers/gcp-workload-identity/
+    # This will be set as a annotation on the KEDA service account.
+    enabled: false
+    # -- GCP IAM Service Account Email which you would like to use for workload identity.
+    gcpIAMServiceAccount: ""
 
-# overrides pod.spec.hostAliases in the grafana deployment's pods
-hostAliases: []
-  # - ip: "1.2.3.4"
-  #   hostnames:
-  #     - "my.host.com"
+# -- Set this if you are using an external scaler and want to communicate
+# over TLS (recommended). This variable holds the name of the secret that
+# will be mounted to the /grpccerts path on the Pod
+grpcTLSCertsSecret: ""
 
-ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  labels:
-  path: /
+# -- Set this if you are using HashiCorp Vault and want to communicate
+# over TLS (recommended). This variable holds the name of the secret that
+# will be mounted to the /vault path on the Pod
+hashiCorpVaultTLS: ""
 
-  # pathType is only for k8s >= 1.1=
-  pathType: Prefix
+logging:
+  operator:
+    # -- Logging level for KEDA Operator.
+    # allowed values: `debug`, `info`, `error`, or an integer value greater than 0, specified as string
+    level: info
+    # -- Logging format for KEDA Operator.
+    # allowed values: `json` or `console`
+    format: console
+    # -- Logging time encoding for KEDA Operator.
+    # allowed values are `epoch`, `millis`, `nano`, `iso8601`, `rfc3339` or `rfc3339nano`
+    timeEncoding: rfc3339
+  metricServer:
+    # -- Logging level for Metrics Server.
+    # allowed values: `0` for info, `4` for debug, or an integer value greater than 0, specified as string
+    level: 0
 
-  hosts:
-    #- chart-example.local
-    - grafana2.itblast.ovh
-  ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
-  extraPaths: []
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  webhooks:
+    # -- Logging level for KEDA Operator.
+    # allowed values: `debug`, `info`, `error`, or an integer value greater than 0, specified as string
+    level: info
+    # -- Logging format for KEDA Admission webhooks.
+    # allowed values: `json` or `console`
+    format: console
+    # -- Logging time encoding for KEDA Operator.
+    # allowed values are `epoch`, `millis`, `nano`, `iso8601`, `rfc3339` or `rfc3339nano`
+    timeEncoding: rfc3339
 
-
-## Enable an Specify container in extraContainers. This is meant to allow adding an authentication proxy to a grafana pod
-extraContainers: ""
-# extraContainers: |
-# - name: proxy
-#   image: quay.io/gambol99/keycloak-proxy:latest
-#   args:
-#   - -provider=github
-#   - -client-id=
-#   - -client-secret=
-#   - -github-org=<ORG_NAME>
-#   - -email-domain=*
-#   - -cookie-secret=
-#   - -http-address=http://0.0.0.0:4181
-#   - -upstream-url=http://127.0.0.1:3000
-#   ports:
-#     - name: proxy-web
-#       containerPort: 4181
-
-## Volumes that can be used in init containers that will not be mounted to deployment pods
-extraContainerVolumes: []
-#  - name: volume-from-secret
-#    secret:
-#      secretName: secret-to-mount
-#  - name: empty-dir-volume
-#    emptyDir: {}
-
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  type: pvc
-  enabled: true
-  # storageClassName: default
-  accessModes:
-    - ReadWriteOnce
-  size: 10Gi
-  # annotations: {}
-  finalizers:
-    - kubernetes.io/pvc-protection
-  # selectorLabels: {}
-  ## Sub-directory of the PV to mount. Can be templated.
-  # subPath: ""
-  ## Name of an existing PVC. Can be templated.
-  # existingClaim:
-  ## Extra labels to apply to a PVC.
-  extraPvcLabels: {}
-
-initChownData:
-  ## If false, data ownership will not be reset at startup
-  ## This allows the grafana-server to be run with an arbitrary user
-  ##
-  enabled: true
-
-  ## initChownData container image
-  ##
-  image:
-    repository: docker.io/library/busybox
-    tag: "1.31.1"
-    sha: ""
-    pullPolicy: IfNotPresent
-
-  ## initChownData resource requests and limits
-  ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources: {}
-  #  limits:
-  #    cpu: 100m
-  #    memory: 128Mi
-  #  requests:
-  #    cpu: 100m
-  #    memory: 128Mi
-  securityContext:
-    runAsNonRoot: false
-    runAsUser: 0
-    seccompProfile:
-      type: RuntimeDefault
-    capabilities:
-      add:
-        - CHOWN
-
-# Administrator credentials when not using an existing secret (see below)
-adminUser: admin
-# adminPassword: strongpassword
-
-# Use an existing secret for the admin user.
-admin:
-  ## Name of the secret. Can be templated.
-  existingSecret: ""
-  userKey: admin-user
-  passwordKey: admin-password
-
-## Define command to be executed at startup by grafana container
-## Needed if using `vault-env` to manage secrets (ref: https://banzaicloud.com/blog/inject-secrets-into-pods-vault/)
-## Default is "run.sh" as defined in grafana's Dockerfile
-# command:
-# - "sh"
-# - "/run.sh"
-
-## Optionally define args if command is used
-## Needed if using `hashicorp/envconsul` to manage secrets
-## By default no arguments are set
-# args:
-# - "-secret"
-# - "secret/grafana"
-# - "./grafana"
-
-## Extra environment variables that will be pass onto deployment pods
-##
-## to provide grafana with access to CloudWatch on AWS EKS:
-## 1. create an iam role of type "Web identity" with provider oidc.eks.* (note the provider for later)
-## 2. edit the "Trust relationships" of the role, add a line inside the StringEquals clause using the
-## same oidc eks provider as noted before (same as the existing line)
-## also, replace NAMESPACE and prometheus-operator-grafana with the service account namespace and name
-##
-##  "oidc.eks.us-east-1.amazonaws.com/id/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:sub": "system:serviceaccount:NAMESPACE:prometheus-operator-grafana",
-##
-## 3. attach a policy to the role, you can use a built in policy called CloudWatchReadOnlyAccess
-## 4. use the following env: (replace 123456789000 and iam-role-name-here with your aws account number and role name)
-##
-## env:
-##   AWS_ROLE_ARN: arn:aws:iam::123456789000:role/iam-role-name-here
-##   AWS_WEB_IDENTITY_TOKEN_FILE: /var/run/secrets/eks.amazonaws.com/serviceaccount/token
-##   AWS_REGION: us-east-1
-##
-## 5. uncomment the EKS section in extraSecretMounts: below
-## 6. uncomment the annotation section in the serviceAccount: above
-## make sure to replace arn:aws:iam::123456789000:role/iam-role-name-here with your role arn
-
-env: {}
-
-## "valueFrom" environment variable references that will be added to deployment pods. Name is templated.
-## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvarsource-v1-core
-## Renders in container spec as:
-##   env:
-##     ...
-##     - name: <key>
-##       valueFrom:
-##         <value rendered as YAML>
-envValueFrom: {}
-  #  ENV_NAME:
-  #    configMapKeyRef:
-  #      name: configmap-name
-  #      key: value_key
-
-## The name of a secret in the same kubernetes namespace which contain values to be added to the environment
-## This can be useful for auth tokens, etc. Value is templated.
-envFromSecret: ""
-
-## Sensible environment variables that will be rendered as new secret object
-## This can be useful for auth tokens, etc.
-## If the secret values contains "{{", they'll need to be properly escaped so that they are not interpreted by Helm
-## ref: https://helm.sh/docs/howto/charts_tips_and_tricks/#using-the-tpl-function
-envRenderSecret: {}
-
-## The names of secrets in the same kubernetes namespace which contain values to be added to the environment
-## Each entry should contain a name key, and can optionally specify whether the secret must be defined with an optional key.
-## Name is templated.
-envFromSecrets: []
-## - name: secret-name
-##   optional: true
-
-## The names of conifgmaps in the same kubernetes namespace which contain values to be added to the environment
-## Each entry should contain a name key, and can optionally specify whether the configmap must be defined with an optional key.
-## Name is templated.
-## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#configmapenvsource-v1-core
-envFromConfigMaps: []
-## - name: configmap-name
-##   optional: true
-
-# Inject Kubernetes services as environment variables.
-# See https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#environment-variables
-enableServiceLinks: true
-
-## Additional grafana server secret mounts
-# Defines additional mounts with secrets. Secrets must be manually created in the namespace.
-extraSecretMounts: []
-  # - name: secret-files
-  #   mountPath: /etc/secrets
-  #   secretName: grafana-secret-files
-  #   readOnly: true
-  #   subPath: ""
-  #
-  # for AWS EKS (cloudwatch) use the following (see also instruction in env: above)
-  # - name: aws-iam-token
-  #   mountPath: /var/run/secrets/eks.amazonaws.com/serviceaccount
-  #   readOnly: true
-  #   projected:
-  #     defaultMode: 420
-  #     sources:
-  #       - serviceAccountToken:
-  #           audience: sts.amazonaws.com
-  #           expirationSeconds: 86400
-  #           path: token
-  #
-  # for CSI e.g. Azure Key Vault use the following
-  # - name: secrets-store-inline
-  #  mountPath: /run/secrets
-  #  readOnly: true
-  #  csi:
-  #    driver: secrets-store.csi.k8s.io
-  #    readOnly: true
-  #    volumeAttributes:
-  #      secretProviderClass: "akv-grafana-spc"
-  #    nodePublishSecretRef:                       # Only required when using service principal mode
-  #       name: grafana-akv-creds                  # Only required when using service principal mode
-
-## Additional grafana server volume mounts
-# Defines additional volume mounts.
-extraVolumeMounts: []
-  # - name: extra-volume-0
-  #   mountPath: /mnt/volume0
-  #   readOnly: true
-  #   existingClaim: volume-claim
-  # - name: extra-volume-1
-  #   mountPath: /mnt/volume1
-  #   readOnly: true
-  #   hostPath: /usr/shared/
-  # - name: grafana-secrets
-  #   csi: true
-  #   data:
-  #     driver: secrets-store.csi.k8s.io
-  #     readOnly: true
-  #     volumeAttributes:
-  #       secretProviderClass: "grafana-env-spc"
-
-## Container Lifecycle Hooks. Execute a specific bash command or make an HTTP request
-lifecycleHooks: {}
-  # postStart:
-  #   exec:
-  #     command: []
-
-## Pass the plugins you want installed as a list.
-##
-plugins: []
-  # - digrich-bubblechart-panel
-  # - grafana-clock-panel
-  ## You can also use other plugin download URL, as long as they are valid zip files,
-  ## and specify the name of the plugin after the semicolon. Like this:
-  # - https://grafana.com/api/plugins/marcusolsson-json-datasource/versions/1.3.2/download;marcusolsson-json-datasource
-
-## Configure grafana datasources
-## ref: http://docs.grafana.org/administration/provisioning/#datasources
-##
-datasources: {}
-alerting: {}
-notifiers: {}
-dashboardProviders: {}
-dashboards: {}
-dashboardsConfigMaps: {}
-grafana.ini:
-  paths:
-    data: /var/lib/grafana/
-    logs: /var/log/grafana
-    plugins: /var/lib/grafana/plugins
-    provisioning: /etc/grafana/provisioning
-  analytics:
-    check_for_updates: true
-  log:
-    mode: console
-  grafana_net:
-    url: https://grafana.net
-  server:
-    domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ .Values.ingress.hosts | first }}{{ else }}''{{ end }}"
-## grafana Authentication can be enabled with the following values on grafana.ini
- # server:
-      # The full public facing url you use in browser, used for redirects and emails
- #    root_url:
- # https://grafana.com/docs/grafana/latest/auth/github/#enable-github-in-grafana
- # auth.github:
- #    enabled: false
- #    allow_sign_up: false
- #    scopes: user:email,read:org
- #    auth_url: https://github.com/login/oauth/authorize
- #    token_url: https://github.com/login/oauth/access_token
- #    api_url: https://api.github.com/user
- #    team_ids:
- #    allowed_organizations:
- #    client_id:
- #    client_secret:
-## LDAP Authentication can be enabled with the following values on grafana.ini
-## NOTE: Grafana will fail to start if the value for ldap.toml is invalid
-  # auth.ldap:
-  #   enabled: true
-  #   allow_sign_up: true
-  #   config_file: /etc/grafana/ldap.toml
-
-## Grafana's LDAP configuration
-## Templated by the template in _helpers.tpl
-## NOTE: To enable the grafana.ini must be configured with auth.ldap.enabled
-## ref: http://docs.grafana.org/installation/configuration/#auth-ldap
-## ref: http://docs.grafana.org/installation/ldap/#configuration
-ldap:
-  enabled: false
-  # `existingSecret` is a reference to an existing secret containing the ldap configuration
-  # for Grafana in a key `ldap-toml`.
-  existingSecret: ""
-  # `config` is the content of `ldap.toml` that will be stored in the created secret
-  config: ""
-  # config: |-
-  #   verbose_logging = true
-
-  #   [[servers]]
-  #   host = "my-ldap-server"
-  #   port = 636
-  #   use_ssl = true
-  #   start_tls = false
-  #   ssl_skip_verify = false
-  #   bind_dn = "uid=%s,ou=users,dc=myorg,dc=com"
-
-## Grafana's SMTP configuration
-## NOTE: To enable, grafana.ini must be configured with smtp.enabled
-## ref: http://docs.grafana.org/installation/configuration/#smtp
-smtp:
-  # `existingSecret` is a reference to an existing secret containing the smtp configuration
-  # for Grafana.
-  existingSecret: ""
-  userKey: "user"
-  passwordKey: "password"
-
-## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
-## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
-sidecar:
-  image:
-    repository: quay.io/kiwigrid/k8s-sidecar
-    tag: 1.24.3
-    sha: ""
-  imagePullPolicy: IfNotPresent
-  
-  securityContext:
-    allowPrivilegeEscalation: false
+# -- [Security context] for all containers
+# @default -- [See below](#KEDA-is-secure-by-default)
+securityContext:
+  # -- [Security context] of the operator container
+  # @default -- [See below](#KEDA-is-secure-by-default)
+  operator:
     capabilities:
       drop:
       - ALL
-    seccompProfile:
-      type: RuntimeDefault
-  # skipTlsVerify Set to true to skip tls verification for kube api calls
-  skipTlsVerify: true
-  enableUniqueFilenames: false
-  readinessProbe: {}
-  livenessProbe: {}
-  # Log level default for all sidecars. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL. Defaults to INFO
-  # logLevel: INFO
-  alerts:
-    enabled: false
-    # Additional environment variables for the alerts sidecar
-    env: {}
-    # Do not reprocess already processed unchanged resources on k8s API reconnect.
-    # ignoreAlreadyProcessed: true
-    # label that the configmaps with alert are marked with
-    label: grafana_alert
-    # value of label that the configmaps with alert are set to
-    labelValue: ""
-    # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
-    # logLevel: INFO
-    # If specified, the sidecar will search for alert config-maps inside this namespace.
-    # Otherwise the namespace in which the sidecar is running will be used.
-    # It's also possible to specify ALL to search in all namespaces
-    searchNamespace: null
-    # Method to use to detect ConfigMap changes. With WATCH the sidecar will do a WATCH requests, with SLEEP it will list all ConfigMaps, then sleep for 60 seconds.
-    watchMethod: WATCH
-    # search in configmap, secret or both
-    resource: both
-    # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
-    # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
-    # watchServerTimeout: 3600
-    #
-    # watchClientTimeout: is a client-side timeout, configuring your local socket.
-    # If you have a network outage dropping all packets with no RST/FIN,
-    # this is how long your client waits before realizing & dropping the connection.
-    # defaults to 66sec (sic!)
-    # watchClientTimeout: 60
-    #
-    # Endpoint to send request to reload alerts
-    reloadURL: "http://localhost:3000/api/admin/provisioning/alerting/reload"
-    # Absolute path to shell script to execute after a alert got reloaded
-    script: null
-    skipReload: false
-    # Deploy the alert sidecar as an initContainer in addition to a container.
-    # Additional alert sidecar volume mounts
-    extraMounts: []
-    # Sets the size limit of the alert sidecar emptyDir volume
-    sizeLimit: {}
-  dashboards:
-    enabled: false
-    # Additional environment variables for the dashboards sidecar
-    env: {}
-    # Do not reprocess already processed unchanged resources on k8s API reconnect.
-    # ignoreAlreadyProcessed: true
-    SCProvider: true
-    # label that the configmaps with dashboards are marked with
-    label: grafana_dashboard
-    # value of label that the configmaps with dashboards are set to
-    labelValue: ""
-    # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
-    # logLevel: INFO
-    # folder in the pod that should hold the collected dashboards (unless `defaultFolderName` is set)
-    folder: /tmp/dashboards
-    # The default folder name, it will create a subfolder under the `folder` and put dashboards in there instead
-    defaultFolderName: null
-    # Namespaces list. If specified, the sidecar will search for config-maps/secrets inside these namespaces.
-    # Otherwise the namespace in which the sidecar is running will be used.
-    # It's also possible to specify ALL to search in all namespaces.
-    searchNamespace: null
-    # Method to use to detect ConfigMap changes. With WATCH the sidecar will do a WATCH requests, with SLEEP it will list all ConfigMaps, then sleep for 60 seconds.
-    watchMethod: WATCH
-    # search in configmap, secret or both
-    resource: both
-    # If specified, the sidecar will look for annotation with this name to create folder and put graph here.
-    # You can use this parameter together with `provider.foldersFromFilesStructure`to annotate configmaps and create folder structure.
-    folderAnnotation: null
-    # Endpoint to send request to reload alerts
-    reloadURL: "http://localhost:3000/api/admin/provisioning/dashboards/reload"
-    # Absolute path to shell script to execute after a configmap got reloaded
-    script: null
-    skipReload: false
-    # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
-    # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
-    # watchServerTimeout: 3600
-    #
-    # watchClientTimeout: is a client-side timeout, configuring your local socket.
-    # If you have a network outage dropping all packets with no RST/FIN,
-    # this is how long your client waits before realizing & dropping the connection.
-    # defaults to 66sec (sic!)
-    # watchClientTimeout: 60
-    #
-    # provider configuration that lets grafana manage the dashboards
-    provider:
-      # name of the provider, should be unique
-      name: sidecarProvider
-      # orgid as configured in grafana
-      orgid: 1
-      # folder in which the dashboards should be imported in grafana
-      folder: ''
-      # type of the provider
-      type: file
-      # disableDelete to activate a import-only behaviour
-      disableDelete: false
-      # allow updating provisioned dashboards from the UI
-      allowUiUpdates: false
-      # allow Grafana to replicate dashboard structure from filesystem
-      foldersFromFilesStructure: false
-    # Additional dashboard sidecar volume mounts
-    extraMounts: []
-    # Sets the size limit of the dashboard sidecar emptyDir volume
-    sizeLimit: {}
-  datasources:
-    enabled: false
-    # Additional environment variables for the datasourcessidecar
-    env: {}
-    # Do not reprocess already processed unchanged resources on k8s API reconnect.
-    # ignoreAlreadyProcessed: true
-    # label that the configmaps with datasources are marked with
-    label: grafana_datasource
-    # value of label that the configmaps with datasources are set to
-    labelValue: ""
-    # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
-    # logLevel: INFO
-    # If specified, the sidecar will search for datasource config-maps inside this namespace.
-    # Otherwise the namespace in which the sidecar is running will be used.
-    # It's also possible to specify ALL to search in all namespaces
-    searchNamespace: null
-    # Method to use to detect ConfigMap changes. With WATCH the sidecar will do a WATCH requests, with SLEEP it will list all ConfigMaps, then sleep for 60 seconds.
-    watchMethod: WATCH
-    # search in configmap, secret or both
-    resource: both
-    # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
-    # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
-    # watchServerTimeout: 3600
-    #
-    # watchClientTimeout: is a client-side timeout, configuring your local socket.
-    # If you have a network outage dropping all packets with no RST/FIN,
-    # this is how long your client waits before realizing & dropping the connection.
-    # defaults to 66sec (sic!)
-    # watchClientTimeout: 60
-    #
-    # Endpoint to send request to reload datasources
-    reloadURL: "http://localhost:3000/api/admin/provisioning/datasources/reload"
-    # Absolute path to shell script to execute after a datasource got reloaded
-    script: null
-    skipReload: false
-    # Deploy the datasource sidecar as an initContainer in addition to a container.
-    # This is needed if skipReload is true, to load any datasources defined at startup time.
-    initDatasources: false
-    # Sets the size limit of the datasource sidecar emptyDir volume
-    sizeLimit: {}
-  plugins:
-    enabled: false
-    # Additional environment variables for the plugins sidecar
-    env: {}
-    # Do not reprocess already processed unchanged resources on k8s API reconnect.
-    # ignoreAlreadyProcessed: true
-    # label that the configmaps with plugins are marked with
-    label: grafana_plugin
-    # value of label that the configmaps with plugins are set to
-    labelValue: ""
-    # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
-    # logLevel: INFO
-    # If specified, the sidecar will search for plugin config-maps inside this namespace.
-    # Otherwise the namespace in which the sidecar is running will be used.
-    # It's also possible to specify ALL to search in all namespaces
-    searchNamespace: null
-    # Method to use to detect ConfigMap changes. With WATCH the sidecar will do a WATCH requests, with SLEEP it will list all ConfigMaps, then sleep for 60 seconds.
-    watchMethod: WATCH
-    # search in configmap, secret or both
-    resource: both
-    # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
-    # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
-    # watchServerTimeout: 3600
-    #
-    # watchClientTimeout: is a client-side timeout, configuring your local socket.
-    # If you have a network outage dropping all packets with no RST/FIN,
-    # this is how long your client waits before realizing & dropping the connection.
-    # defaults to 66sec (sic!)
-    # watchClientTimeout: 60
-    #
-    # Endpoint to send request to reload plugins
-    reloadURL: "http://localhost:3000/api/admin/provisioning/plugins/reload"
-    # Absolute path to shell script to execute after a plugin got reloaded
-    script: null
-    skipReload: false
-    # Deploy the datasource sidecar as an initContainer in addition to a container.
-    # This is needed if skipReload is true, to load any plugins defined at startup time.
-    initPlugins: false
-    # Sets the size limit of the plugin sidecar emptyDir volume
-    sizeLimit: {}
-  notifiers:
-    enabled: false
-    # Additional environment variables for the notifierssidecar
-    env: {}
-    # Do not reprocess already processed unchanged resources on k8s API reconnect.
-    # ignoreAlreadyProcessed: true
-    # label that the configmaps with notifiers are marked with
-    label: grafana_notifier
-    # value of label that the configmaps with notifiers are set to
-    labelValue: ""
-    # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
-    # logLevel: INFO
-    # If specified, the sidecar will search for notifier config-maps inside this namespace.
-    # Otherwise the namespace in which the sidecar is running will be used.
-    # It's also possible to specify ALL to search in all namespaces
-    searchNamespace: null
-    # Method to use to detect ConfigMap changes. With WATCH the sidecar will do a WATCH requests, with SLEEP it will list all ConfigMaps, then sleep for 60 seconds.
-    watchMethod: WATCH
-    # search in configmap, secret or both
-    resource: both
-    # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
-    # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
-    # watchServerTimeout: 3600
-    #
-    # watchClientTimeout: is a client-side timeout, configuring your local socket.
-    # If you have a network outage dropping all packets with no RST/FIN,
-    # this is how long your client waits before realizing & dropping the connection.
-    # defaults to 66sec (sic!)
-    # watchClientTimeout: 60
-    #
-    # Endpoint to send request to reload notifiers
-    reloadURL: "http://localhost:3000/api/admin/provisioning/notifications/reload"
-    # Absolute path to shell script to execute after a notifier got reloaded
-    script: null
-    skipReload: false
-    # Deploy the notifier sidecar as an initContainer in addition to a container.
-    # This is needed if skipReload is true, to load any notifiers defined at startup time.
-    initNotifiers: false
-    # Sets the size limit of the notifier sidecar emptyDir volume
-    sizeLimit: {}
-
-## Override the deployment namespace
-##
-namespaceOverride: ""
-
-## Number of old ReplicaSets to retain
-##
-revisionHistoryLimit: 10
-
-## Add a seperate remote image renderer deployment/service
-imageRenderer:
-  deploymentStrategy: {}
-  # Enable the image-renderer deployment & service
-  enabled: false
-  replicas: 1
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: "60"
-    targetMemory: ""
-    behavior: {}
-  image:
-    # image-renderer Image repository
-    repository: docker.io/grafana/grafana-image-renderer
-    # image-renderer Image tag
-    tag: latest
-    # image-renderer Image sha (optional)
-    sha: ""
-    # image-renderer ImagePullPolicy
-    pullPolicy: Always
-  # extra environment variables
-  env:
-    HTTP_HOST: "0.0.0.0"
-    # RENDERING_ARGS: --no-sandbox,--disable-gpu,--window-size=1280x758
-    # RENDERING_MODE: clustered
-    # IGNORE_HTTPS_ERRORS: true
-
-  ## "valueFrom" environment variable references that will be added to deployment pods. Name is templated.
-  ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvarsource-v1-core
-  ## Renders in container spec as:
-  ##   env:
-  ##     ...
-  ##     - name: <key>
-  ##       valueFrom:
-  ##         <value rendered as YAML>
-  envValueFrom: {}
-    #  ENV_NAME:
-    #    configMapKeyRef:
-    #      name: configmap-name
-    #      key: value_key
-
-  # image-renderer deployment serviceAccount
-  serviceAccountName: ""
-  # image-renderer deployment securityContext
-  securityContext: {}
-  # image-renderer deployment container securityContext
-  containerSecurityContext:
-    seccompProfile:
-      type: RuntimeDefault
-    capabilities:
-      drop: ['ALL']
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
-  # image-renderer deployment Host Aliases
-  hostAliases: []
-  # image-renderer deployment priority class
-  priorityClassName: ''
-  service:
-    # Enable the image-renderer service
+    seccompProfile:
+      type: RuntimeDefault
+  # -- [Security context] of the metricServer container
+  # @default -- [See below](#KEDA-is-secure-by-default)
+  metricServer:
+    capabilities:
+      drop:
+      - ALL
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+  # -- [Security context] of the admission webhooks container
+  # @default -- [See below](#KEDA-is-secure-by-default)
+  webhooks:
+    capabilities:
+      drop:
+      - ALL
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+
+# --  [Pod security context] for all pods
+# @default -- [See below](#KEDA-is-secure-by-default)
+podSecurityContext:
+  # -- [Pod security context] of the KEDA operator pod
+  # @default -- [See below](#KEDA-is-secure-by-default)
+  operator:
+    runAsNonRoot: true
+    # runAsUser: 1000
+    # runAsGroup: 1000
+    # fsGroup: 1000
+
+  # -- [Pod security context] of the KEDA metrics apiserver pod
+  # @default -- [See below](#KEDA-is-secure-by-default)
+  metricServer:
+    runAsNonRoot: true
+    # runAsUser: 1000
+    # runAsGroup: 1000
+    # fsGroup: 1000
+
+  # -- [Pod security context] of the KEDA admission webhooks
+  # @default -- [See below](#KEDA-is-secure-by-default)
+  webhooks:
+    runAsNonRoot: true
+    # runAsUser: 1000
+    # runAsGroup: 1000
+    # fsGroup: 1000
+
+service:
+  # -- KEDA Metric Server service type
+  type: ClusterIP
+  # -- HTTPS port for KEDA Metric Server service
+  portHttps: 443
+  # -- HTTPS port for KEDA Metric Server container
+  portHttpsTarget: 6443
+  # -- Annotations to add the KEDA Metric Server service
+  annotations: {}
+
+# We provides the default values that we describe in our docs:
+# https://keda.sh/docs/latest/operate/cluster/
+# If you want to specify the resources (or totally remove the defaults), change or comment the following
+# lines, adjust them as necessary, or simply add the curly braces after 'operator' and/or 'metricServer'
+# and remove/comment the default values
+resources:
+  # -- Manage [resource request & limits] of KEDA operator pod
+  operator:
+    limits:
+      cpu: 1
+      memory: 1000Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  # -- Manage [resource request & limits] of KEDA metrics apiserver pod
+  metricServer:
+    limits:
+      cpu: 1
+      memory: 1000Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  # -- Manage [resource request & limits] of KEDA admission webhooks pod
+  webhooks:
+    limits:
+      cpu: 50m
+      memory: 100Mi
+    requests:
+      cpu: 10m
+      memory: 10Mi
+# -- Node selector for pod scheduling ([docs](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/))
+nodeSelector: {}
+# -- Tolerations for pod scheduling ([docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/))
+tolerations: []
+
+topologySpreadConstraints:
+  # -- [Pod Topology Constraints] of KEDA operator pod
+  operator: []
+  # -- [Pod Topology Constraints] of KEDA metrics apiserver pod
+  metricsServer: []
+  # -- [Pod Topology Constraints] of KEDA admission webhooks pod
+  webhooks: []
+
+# -- [Affinity] for pod scheduling for both KEDA operator and Metrics API Server
+affinity: {}
+  # podAntiAffinity:
+  #   requiredDuringSchedulingIgnoredDuringExecution:
+  #   - labelSelector:
+  #       matchExpressions:
+  #       - key: app
+  #         operator: In
+  #         values:
+  #         - keda-operator
+  #         - keda-operator-metrics-apiserver
+  #     topologyKey: "kubernetes.io/hostname"
+
+# -- priorityClassName for all KEDA components
+priorityClassName: ""
+
+## The default HTTP timeout in milliseconds that KEDA should use
+## when making requests to external services. Removing this defaults to a
+## reasonable default
+http:
+  # -- The default HTTP timeout to use for all scalers that use raw HTTP clients (some scalers use SDKs to access target services. These have built-in HTTP clients, and the timeout does not necessarily apply to them)
+  timeout: 3000
+  keepAlive:
+    # -- Enable HTTP connection keep alive
     enabled: true
-    # image-renderer service port name
-    portName: 'http'
-    # image-renderer service port used by both service and deployment
-    port: 8081
-    targetPort: 8081
-    # Adds the appProtocol field to the image-renderer service. This allows to work with istio protocol selection. Ex: "http" or "tcp"
-    appProtocol: ""
-  serviceMonitor:
-    ## If true, a ServiceMonitor CRD is created for a prometheus operator
-    ## https://github.com/coreos/prometheus-operator
-    ##
+  # -- The minimum TLS version to use for all scalers that use raw HTTP clients (some scalers use SDKs to access target services. These have built-in HTTP clients, and this value does not necessarily apply to them)
+  minTlsVersion: TLS12
+
+## Extra KEDA Operator and Metrics Adapter container arguments
+extraArgs:
+  # -- Additional KEDA Operator container arguments
+  keda: {}
+  # -- Additional Metrics Adapter container arguments
+  metricsAdapter: {}
+
+# -- Additional environment variables that will be passed onto all KEDA components
+env: []
+# - name: ENV_NAME
+#   value: 'ENV-VALUE'
+
+# Extra volumes and volume mounts for the deployment. Optional.
+volumes:
+  keda:
+    # -- Extra volumes for KEDA deployment
+    extraVolumes: []
+    # -- Extra volume mounts for KEDA deployment
+    extraVolumeMounts: []
+
+  metricsApiServer:
+    # -- Extra volumes for metric server deployment
+    extraVolumes: []
+    # -- Extra volume mounts for metric server deployment
+    extraVolumeMounts: []
+
+  webhooks:
+    # -- Extra volumes for admission webhooks deployment
+    extraVolumes: []
+    # -- Extra volume mounts for admission webhooks deployment
+    extraVolumeMounts: []
+
+prometheus:
+  metricServer:
+    # -- Enable metric server Prometheus metrics expose
     enabled: false
-    path: /metrics
-    #  namespace: monitoring  (defaults to use the namespace this chart is deployed to)
-    labels: {}
-    interval: 1m
-    scheme: http
-    tlsConfig: {}
-    scrapeTimeout: 30s
-    relabelings: []
-    # See: https://doc.crds.dev/github.com/prometheus-operator/kube-prometheus/monitoring.coreos.com/ServiceMonitor/v1@v0.11.0#spec-targetLabels
-    targetLabels: []
-      # - targetLabel1
-      # - targetLabel2
-  # If https is enabled in Grafana, this needs to be set as 'https' to correctly configure the callback used in Grafana
-  grafanaProtocol: http
-  # In case a sub_path is used this needs to be added to the image renderer callback
-  grafanaSubPath: ""
-  # name of the image-renderer port on the pod
-  podPortName: http
-  # number of image-renderer replica sets to keep
-  revisionHistoryLimit: 10
-  networkPolicy:
-    # Enable a NetworkPolicy to limit inbound traffic to only the created grafana pods
-    limitIngress: true
-    # Enable a NetworkPolicy to limit outbound traffic to only the created grafana pods
-    limitEgress: false
-    # Allow additional services to access image-renderer (eg. Prometheus operator when ServiceMonitor is enabled)
-    extraIngressSelectors: []
+    # -- HTTP port used for exposing metrics server prometheus metrics
+    port: 8080
+    # -- HTTP port name for exposing metrics server prometheus metrics
+    portName: metrics
+    serviceMonitor:
+      # -- Enables ServiceMonitor creation for the Prometheus Operator
+      enabled: false
+      # -- JobLabel selects the label from the associated Kubernetes service which will be used as the job label for all metrics. [ServiceMonitor Spec]
+      jobLabel: ""
+      # -- TargetLabels transfers labels from the Kubernetes `Service` onto the created metrics
+      targetLabels: []
+      # -- PodTargetLabels transfers labels on the Kubernetes `Pod` onto the created metrics
+      podTargetLabels: []
+      # -- Name of the service port this endpoint refers to. Mutually exclusive with targetPort
+      port: metrics
+      # -- Name or number of the target port of the Pod behind the Service, the port must be specified with container port property. Mutually exclusive with port
+      targetPort: ""
+      # -- Interval at which metrics should be scraped If not specified Prometheus’ global scrape interval is used.
+      interval: ""
+      # -- Timeout after which the scrape is ended If not specified, the Prometheus global scrape timeout is used unless it is less than Interval in which the latter is used
+      scrapeTimeout: ""
+      # -- DEPRECATED. List of expressions that define custom relabeling rules for metric server ServiceMonitor crd (prometheus operator). [RelabelConfig Spec]
+      relabellings: []
+      # -- List of expressions that define custom relabeling rules for metric server ServiceMonitor crd (prometheus operator). [RelabelConfig Spec]
+      relabelings: []
+      # --  Additional labels to add for metric server using ServiceMonitor crd (prometheus operator)
+      additionalLabels: {}
+    podMonitor:
+      # -- Enables PodMonitor creation for the Prometheus Operator
+      enabled: false
+      # -- Scraping interval for metric server using podMonitor crd (prometheus operator)
+      interval: ""
+      # -- Scraping timeout for metric server using podMonitor crd (prometheus operator)
+      scrapeTimeout: ""
+      # -- Scraping namespace for metric server using podMonitor crd (prometheus operator)
+      namespace: ""
+      # -- Additional labels to add for metric server using podMonitor crd (prometheus operator)
+      additionalLabels: {}
+      # -- List of expressions that define custom relabeling rules for metric server podMonitor crd (prometheus operator)
+      relabelings: []
+  operator:
+    # -- Enable KEDA Operator prometheus metrics expose
+    enabled: false
+    # -- Port used for exposing KEDA Operator prometheus metrics
+    port: 8080
+    serviceMonitor:
+      # -- Enables ServiceMonitor creation for the Prometheus Operator
+      enabled: false
+      # -- JobLabel selects the label from the associated Kubernetes service which will be used as the job label for all metrics. [ServiceMonitor Spec]
+      jobLabel: ""
+      # -- TargetLabels transfers labels from the Kubernetes `Service` onto the created metrics
+      targetLabels: []
+      # -- PodTargetLabels transfers labels on the Kubernetes `Pod` onto the created metrics
+      podTargetLabels: []
+      # -- Name of the service port this endpoint refers to. Mutually exclusive with targetPort
+      port: metrics
+      # -- Name or number of the target port of the Pod behind the Service,
+      # the port must be specified with container port property. Mutually exclusive with port
+      targetPort: ""
+      # -- Interval at which metrics should be scraped If not specified Prometheus’ global scrape interval is used.
+      interval: ""
+      # -- Timeout after which the scrape is ended If not specified, the Prometheus global scrape timeout is used unless it is less than Interval in which the latter is used
+      scrapeTimeout: ""
+      # -- DEPRECATED. List of expressions that define custom relabeling rules for metric server ServiceMonitor crd (prometheus operator). [RelabelConfig Spec]
+      relabellings: []
+      # -- List of expressions that define custom relabeling rules for metric server ServiceMonitor crd (prometheus operator). [RelabelConfig Spec]
+      relabelings: []
+      # -- Additional labels to add for metric server using ServiceMonitor crd (prometheus operator)
+      additionalLabels: {}
+    podMonitor:
+      # -- Enables PodMonitor creation for the Prometheus Operator
+      enabled: false
+      # -- Scraping interval for KEDA Operator using podMonitor crd (prometheus operator)
+      interval: ""
+      # -- Scraping timeout for KEDA Operator using podMonitor crd (prometheus operator)
+      scrapeTimeout: ""
+      # -- Scraping namespace for KEDA Operator using podMonitor crd (prometheus operator)
+      namespace: ""
+      # -- Additional labels to add for KEDA Operator using podMonitor crd (prometheus operator)
+      additionalLabels: {}
+      # --  List of expressions that define custom relabeling rules for KEDA Operator podMonitor crd (prometheus operator)
+      relabelings: []
+    prometheusRules:
+      # -- Enables PrometheusRules creation for the Prometheus Operator
+      enabled: false
+      # -- Scraping namespace for KEDA Operator using prometheusRules crd (prometheus operator)
+      namespace: ""
+      # -- Additional labels to add for KEDA Operator using prometheusRules crd (prometheus operator)
+      additionalLabels: {}
+      # -- Additional alerts to add for KEDA Operator using prometheusRules crd (prometheus operator)
+      alerts:
+        []
+        # - alert: KedaScalerErrors
+        #   annotations:
+        #     description: Keda scaledObject {{ $labels.scaledObject }} is experiencing errors with {{ $labels.scaler }} scaler
+        #     summary: Keda Scaler {{ $labels.scaler }} Errors
+        #   expr: sum by ( scaledObject , scaler) (rate(keda_metrics_adapter_scaler_errors[2m]))  > 0
+        #   for: 2m
+        #   labels:
+  webhooks:
+    # -- Enable KEDA admission webhooks prometheus metrics expose
+    enabled: false
+    # -- Port used for exposing KEDA admission webhooks prometheus metrics
+    port: 8080
+    serviceMonitor:
+      # -- Enables ServiceMonitor creation for the Prometheus webhooks
+      enabled: false
+      # -- jobLabel selects the label from the associated Kubernetes service which will be used as the job label for all metrics. [ServiceMonitor Spec]
+      jobLabel: ""
+      # -- TargetLabels transfers labels from the Kubernetes `Service` onto the created metrics
+      targetLabels: []
+      # -- PodTargetLabels transfers labels on the Kubernetes `Pod` onto the created metrics
+      podTargetLabels: []
+      # -- Name of the service port this endpoint refers to. Mutually exclusive with targetPort
+      port: metrics
+      # -- Name or number of the target port of the Pod behind the Service, the port must be specified with container port property. Mutually exclusive with port
+      targetPort: ""
+      # -- Interval at which metrics should be scraped If not specified Prometheus’ global scrape interval is used.
+      interval: ""
+      # -- Timeout after which the scrape is ended If not specified, the Prometheus global scrape timeout is used unless it is less than Interval in which the latter is used
+      scrapeTimeout: ""
+      # -- DEPRECATED. List of expressions that define custom relabeling rules for metric server ServiceMonitor crd (prometheus operator). [RelabelConfig Spec]
+      relabellings: []
+      # -- List of expressions that define custom relabeling rules for metric server ServiceMonitor crd (prometheus operator). [RelabelConfig Spec]
+      relabelings: []
+      # -- Additional labels to add for metric server using ServiceMonitor crd (prometheus operator)
+      additionalLabels: {}
+    prometheusRules:
+      # -- Enables PrometheusRules creation for the Prometheus Operator
+      enabled: false
+      # -- Scraping namespace for KEDA admission webhooks using prometheusRules crd (prometheus operator)
+      namespace: ""
+      # -- Additional labels to add for KEDA admission webhooks using prometheusRules crd (prometheus operator)
+      additionalLabels: {}
+      # -- Additional alerts to add for KEDA admission webhooks using prometheusRules crd (prometheus operator)
+      alerts: []
+
+certificates:
+  # -- Enables the self generation for KEDA TLS certificates inside KEDA operator
+  autoGenerated: true
+  # -- Secret name to be mounted with KEDA TLS certificates
+  secretName: kedaorg-certs
+  # -- Path where KEDA TLS certificates are mounted
+  mountPath: /certs
+  certManager:
+    # -- Enables Cert-manager for certificate management
+    enabled: false
+    # -- Generates a self-signed CA with Cert-manager.
+    # If generateCA is false, the secret with the CA
+    # has to be annotated with `cert-manager.io/allow-direct-injection: "true"`
+    generateCA: true
+    # -- Secret name where the CA is stored (generatedby cert-manager or user given)
+    caSecretName: "kedaorg-ca"
+    # -- Add labels/annotations to secrets created by Certificate resources
+    # [docs](https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources)
+    secretTemplate: {}
+      # annotations:
+      #   my-secret-annotation-1: "foo"
+      #   my-secret-annotation-2: "bar"
+      # labels:
+      #   my-secret-label: foo
+
+permissions:
+  metricServer:
+    restrict:
+      # -- Restrict Secret Access for Metrics Server
+      secret: false
+  operator:
+    restrict:
+      # -- Restrict Secret Access for KEDA operator
+      secret: false
+
+# -- Array of extra K8s manifests to deploy
+extraObjects: []
+  # - apiVersion: keda.sh/v1alpha1
+  #   kind: ClusterTriggerAuthentication
+  #   metadata:
+  #     name: aws-credentials
+  #     namespace: keda
+  #   spec:
+  #     podIdentity:
+  #       provider: aws-eks
+
+# -- Capability to turn on/off ASCII art in Helm installation notes
+asciiArt: true
