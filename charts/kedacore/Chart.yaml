@@ -1,0 +1,9 @@
+apiVersion: v2
+dependencies:
+- name: kedacore
+sources:
+  - https://kedacore.github.io/charts/
+name: kedacore
+description: KEDA
+version: 1.0.0
+type: application
