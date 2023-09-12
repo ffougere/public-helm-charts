@@ -7,7 +7,6 @@ spec:
   securityEnabled: true
   adminUser: admin
   adminPassword: admin
-
   connectors:
   - items:
     name: openwire
@@ -24,7 +23,6 @@ spec:
       protocols: OPENWIRE
       port: 61616
       connectionsAllowed: 1000
-
   env:
     - name: JDK_JAVA_OPTIONS
       value: |
@@ -46,8 +44,7 @@ spec:
       fsGroupChangePolicy: "OnRootMismatch"
     storage:
       size: 2Gi
-  
-  console:
+    console:
     expose: true
     sslEnabled: false
       adminUser: admin
