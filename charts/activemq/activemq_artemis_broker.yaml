@@ -24,11 +24,16 @@ spec:
   #    protocols: amqp
   #    port: 5672
   #    connectionsAllowed: 5
-    - name: openwire
-      expose: true
-      protocols: OPENWIRE
+  - items:
+      bindToAllInterfaces: true
+      name: artemis
       port: 61616
-      connectionsAllowed: 1000
+      protocols: CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE
+  #  - name: openwire
+  #    expose: true
+  #    protocols: OPENWIRE
+  #    port: 61616
+  #    connectionsAllowed: 1000
   env:
     - name: JDK_JAVA_OPTIONS
       value: |
