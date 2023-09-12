@@ -41,3 +41,5 @@ spec:
   console:
     expose: true
     sslEnabled: false
+      adminUser: admin
+      adminPassword: admin
