@@ -28,11 +28,15 @@ spec:
       fsGroupChangePolicy: "OnRootMismatch"
     storage:
       size: 2Gi
-  acceptors: # (2)
-    - name: amqp
-      protocols: amqp
-      port: 5672
-      connectionsAllowed: 5
+  #acceptors: # (2)
+  #  - name: amqp
+  #    protocols: amqp
+  #    port: 5672
+  #    connectionsAllowed: 5
+  #  - name: openwire
+  #    protocols: OPENWIRE
+  #    port: 5672
+  #    connectionsAllowed: 1000
   
   console:
     expose: true
