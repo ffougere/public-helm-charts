@@ -8,7 +8,7 @@ spec:
   console:
       expose: true
       sslEnabled: false
-      securityEnabled: true
+      #securityEnabled: true
       #adminUser: admin
       #adminPassword: admin
 
