@@ -8,9 +8,9 @@ spec:
   console:
       expose: true
       sslEnabled: false
-      adminUser: admin
-      adminPassword: admin
-      
+      #adminUser: admin
+      #adminPassword: admin
+
   adminUser: admin
   adminPassword: admin
   connectors:
