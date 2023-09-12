@@ -16,5 +16,5 @@ resources:
   #- app
   - activemq_artemis_broker.yaml
   #- app/namespace.yaml
-  #- app/ingress.yaml
+  - app/ingress.yaml
   #- app/virtualservice.yaml
