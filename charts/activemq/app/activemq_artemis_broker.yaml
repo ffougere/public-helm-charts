@@ -28,6 +28,12 @@ spec:
       fsGroupChangePolicy: "OnRootMismatch"
     storage:
       size: 2Gi
+  connectors:
+    - items:
+      name: openwire
+      host: 0.0.0.0
+      port: 61616
+
   acceptors: # (2)
   #  - name: amqp
   #    protocols: amqp
