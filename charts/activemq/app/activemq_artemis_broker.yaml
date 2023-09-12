@@ -19,10 +19,11 @@ spec:
   #    protocols: amqp
   #    port: 5672
   #    connectionsAllowed: 5
-  - name: openwire
-    protocols: OPENWIRE
-    port: 61616
-    connectionsAllowed: 1000
+    - name: openwire
+      expose: true
+      protocols: OPENWIRE
+      port: 61616
+      connectionsAllowed: 1000
 
   env:
     - name: JDK_JAVA_OPTIONS
