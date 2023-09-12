@@ -12,8 +12,7 @@ spec:
     name: openwire
     host: 0.0.0.0
     port: 61616
-
-  acceptors: # (2)
+  acceptors:
   #  - name: amqp
   #    protocols: amqp
   #    port: 5672
@@ -45,7 +44,7 @@ spec:
     storage:
       size: 2Gi
     console:
-    expose: true
-    sslEnabled: false
+      expose: true
+      sslEnabled: false
       adminUser: admin
       adminPassword: admin
