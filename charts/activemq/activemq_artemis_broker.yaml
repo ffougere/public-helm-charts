@@ -5,6 +5,12 @@ metadata:
   namespace: activemq-artemis-operator
 spec:
   securityEnabled: true
+  console:
+      expose: true
+      sslEnabled: false
+      adminUser: admin
+      adminPassword: admin
+      
   adminUser: admin
   adminPassword: admin
   connectors:
@@ -43,8 +49,4 @@ spec:
       fsGroupChangePolicy: "OnRootMismatch"
     storage:
       size: 2Gi
-    console:
-      expose: true
-      sslEnabled: false
-      adminUser: admin
-      adminPassword: admin
+    
