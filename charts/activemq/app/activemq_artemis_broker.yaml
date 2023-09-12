@@ -4,6 +4,9 @@ metadata:
   name: activemq-broker
   namespace: activemq-artemis-operator
 spec:
+  securiotyEnabled: true
+    adminUser: admin
+    adminPassword: admin
   env:
     - name: JDK_JAVA_OPTIONS
       value: |
