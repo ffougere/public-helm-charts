@@ -1,0 +1,19 @@
+apiVersion: v2
+dependencies:
+# name of the chart in the repo
+# helm repo add bitnami https://charts.bitnami.com/bitnami
+# helm repo update
+# helm search repo bitnami/redis
+# NAME                 	CHART VERSION	APP VERSION	DESCRIPTION                                       
+# bitnami/redis        	18.0.4       	7.2.1      	Redis(R) is an open source, advanced key-value ...
+# bitnami/redis-cluster	9.0.4        	7.2.1      	Redis(R) is an open source, scalable, distribut...
+
+- name: redis
+  # chart version we want to install
+  version: 7.2.1
+  repository: https://charts.bitnami.com/bitnami
+
+name: redis
+description: redis no cluster 
+version: 1.0.0
+type: application
