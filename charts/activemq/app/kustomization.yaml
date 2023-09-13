@@ -6,6 +6,6 @@ kind: Kustomization
 #- https://github.com/artemiscloud/activemq-artemis-operator/tree/main/config/crd/?ref=v1.0.15
 #- https://raw.githubusercontent.com/artemiscloud/activemq-artemis-operator/v1.0.15/deploy/operator.yaml
 resources:
-- ingress.yaml
-- namespace.yaml
-- activemq_artemis_broker.yaml
+#- ingress.yaml
+#- namespace.yaml
+#- activemq_artemis_broker.yaml
