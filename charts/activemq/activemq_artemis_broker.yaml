@@ -44,7 +44,7 @@ spec:
         -Dhawtio.authenticationEnabled=false
   deploymentPlan:
     size: 1 #cluster mode deployment
-    #image: placeholder
+    requireLogin: true
     image: quay.io/artemiscloud/activemq-artemis-broker-kubernetes:artemis.2.30.0
     persistenceEnabled: true 
     # DATA PERSISTENCE : ALL parameters required
