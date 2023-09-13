@@ -13,8 +13,9 @@ resources:
   - operator/election_role_binding.yaml
   - operator/operator_config.yaml
   - operator/operator.yaml
+  - ingress.yaml
   #- app
   - activemq_artemis_broker.yaml
   #- app/namespace.yaml
-  - ingress.yaml
+  
   #- app/virtualservice.yaml
