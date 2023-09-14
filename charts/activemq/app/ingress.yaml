@@ -24,7 +24,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: activemq-broker-hdls-svc
+                #name: activemq-broker-hdls-svc
+                name: activemq-service-global
                 port:
                   #name: web
-                  number: 8161
+                  #number: 8161
+                  number: 61616
