@@ -24,11 +24,11 @@ spec:
   #    protocols: amqp
   #    port: 5672
   #    connectionsAllowed: 5
-  - items:
-      bindToAllInterfaces: true
-      name: artemis
-      port: 61616
-      protocols: CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE
+  #- items:
+  - name: artemis
+    bindToAllInterfaces: true
+    port: 61616
+    protocols: CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE
   #  - name: openwire
   #    expose: true
   #    protocols: OPENWIRE
