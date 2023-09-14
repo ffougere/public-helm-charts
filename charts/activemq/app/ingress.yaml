@@ -8,9 +8,9 @@ metadata:
     # type of authentication
     nginx.ingress.kubernetes.io/auth-type: basic
     # name of the secret that contains the user/password definitions
-    #kubectl -n activemq-artemis-operator create secret generic artemis-console --from-literal=key1=admin --from-literal=key2=test
+    #kubectl -n activemq-artemis-operator create secret generic basic-auth --from-literal=key1=admin --from-literal=key2=test
     #nginx.ingress.kubernetes.io/auth-secret: artemis-console-d9fm75g829
-    nginx.ingress.kubernetes.io/auth-secret: artemis-console
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
     # message to display with an appropriate context why the authentication is required
     nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
 spec:
