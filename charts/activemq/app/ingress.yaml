@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: activemq
   namespace: activemq-artemis-operator
-    annotations:
+  annotations:
     # type of authentication
     nginx.ingress.kubernetes.io/auth-type: basic
     # name of the secret that contains the user/password definitions
