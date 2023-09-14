@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     ActiveMQArtemis: activemq-broker # ex-aao
-    application: activemq-broker-app #ex-aao-app
+    #application: activemq-broker-app #ex-aao-app
   name: activemq-service-global
   namespace: activemq-artemis-operator
 #  ownerReferences:
@@ -29,6 +29,6 @@ spec:
   publishNotReadyAddresses: true
   selector:
     ActiveMQArtemis: activemq-broker #ex-aao
-    application: activemq-broker-app #ex-aao-app
+    #application: activemq-broker-app #ex-aao-app
   sessionAffinity: None
   type: ClusterIP
