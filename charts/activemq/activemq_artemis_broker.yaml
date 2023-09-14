@@ -43,6 +43,9 @@ spec:
         -Dbrokerconfig.security-enabled=false
         -Dhawtio.authenticationEnabled=false
   deploymentPlan:
+    extraMounts:
+      secrets:
+        - "basic-auth"
     size: 1 #cluster mode deployment
     requireLogin: true
     image: quay.io/artemiscloud/activemq-artemis-broker-kubernetes:artemis.2.30.0

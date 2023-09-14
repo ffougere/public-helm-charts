@@ -1,0 +1,19 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemisSecurity
+metadata:
+  name: activemq-security
+  namespace: activemq-artemis-operator
+spec:
+  loginModules:
+    propertiesLoginModules:
+    - name: 'prop-module'
+      users:
+      - name: admin
+        roles:
+        - root
+  securityDomains:
+    brokerDomain:
+      name: 'activemq'
+      loginModules:
+      - name: 'prop-module'
+        flag: 'sufficient'
