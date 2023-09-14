@@ -46,6 +46,14 @@ spec:
     size: 1 #cluster mode deployment
     requireLogin: true
     image: quay.io/artemiscloud/activemq-artemis-broker-kubernetes:artemis.2.30.0
+    volumeMounts:
+      - name: active-creds
+        mountPath: /home/jboss/amq-broker/etc/jetty-realm.properties
+        subPath: jetty-realm.properties
+  volumes:
+  - name: active-creds
+    secret:
+      secretName: creds
     extraMounts:
       secrets:
       - "basic-auth"
