@@ -20,7 +20,7 @@ spec:
     - host: activemq.itblast.ovh
       http:
         paths:
-          - path: /
+          - path: /console/
             pathType: Prefix
             backend:
               service:
