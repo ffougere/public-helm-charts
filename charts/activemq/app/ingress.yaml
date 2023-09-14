@@ -14,9 +14,9 @@ metadata:
     # message to display with an appropriate context why the authentication is required
     nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
 spec:
-  ingressClassName: nginx
-  tls:
-    - hosts:
+  #ingressClassName: nginx
+  #tls:
+  #  - hosts:
         - activemq.itblast.ovh
   rules:
     - host: activemq.itblast.ovh
