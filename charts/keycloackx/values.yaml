@@ -8,6 +8,7 @@ nameOverride: ""
 replicas: 1
 
 image:
+  debug: true
   # The Keycloak image repository
   repository: quay.io/keycloak/keycloak
   # Overrides the Keycloak image tag whose default is the chart appVersion
@@ -35,9 +36,6 @@ podManagementPolicy: OrderedReady
 
 # StatefulSet's update strategy
 updateStrategy: RollingUpdate
-
-# Pod restart policy. One of `Always`, `OnFailure`, or `Never`
-restartPolicy: Always
 
 serviceAccount:
   # Specifies whether a ServiceAccount should be created
@@ -420,7 +418,7 @@ http:
 
 serviceMonitor:
   # If `true`, a ServiceMonitor resource for the prometheus-operator is created
-  enabled: false
+  enabled: true
   # Optionally sets a target namespace in which to deploy the ServiceMonitor resource
   namespace: ""
   # Optionally sets a namespace for the ServiceMonitor
@@ -440,7 +438,7 @@ serviceMonitor:
 
 extraServiceMonitor:
   # If `true`, a ServiceMonitor resource for the prometheus-operator is created
-  enabled: false
+  enabled: true
   # Optionally sets a target namespace in which to deploy the ServiceMonitor resource
   namespace: ""
   # Optionally sets a namespace for the ServiceMonitor
@@ -520,7 +518,7 @@ autoscaling:
 
 test:
   # If `true`, test resources are created
-  enabled: false
+  enabled: true
   image:
     # The image for the test Pod
     repository: docker.io/seleniarm/standalone-chromium
