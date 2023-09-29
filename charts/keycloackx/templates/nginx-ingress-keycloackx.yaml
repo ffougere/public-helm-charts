@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-ingress-grafana
+  name: nginx-ingress-keycloackx
   namespace: keycloackx
   annotations:
     kubernetes.io/ingress.class: nginx
