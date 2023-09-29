@@ -2,18 +2,18 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-ingress-grafana
-  namespace: grafana
+  namespace: keycloackx
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: "grafana.itblast.ovh"
+  - host: "keycloackx.itblast.ovh"
     http:
       paths:
       - pathType: Prefix
-        path: "/login"
+        path: "/"
         backend:
           service:
-            name: grafana
+            name: keycloackx-keycloakx-http
             port:
               number: 80
