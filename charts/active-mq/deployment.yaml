@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: active-mq
+  labels:
+    app: active-mq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: active-mq
+  template:
+    metadata:
+      labels:
+        app: active-mq
+    spec:
+      containers:
+      - image: activemq-artemis:latest
+      volumeMounts:
+      - name: active-creds
+        #mountPath: /home/jboss/amq-broker/etc/jetty-realm.properties # for artemis
+        mountPath: /opt/activemq/conf/jetty-realm.properties
+        subPath: jetty-realm.properties
+      name: active-mq
+    #imagePullPolicy: Always
+    
+    volumes:
+    - name: active-creds
+      secret:
+        secretName: creds
+  #restartPolicy: Always

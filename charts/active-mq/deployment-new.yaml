@@ -1,0 +1,40 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: active-mq
+  labels:
+    app: active-mq
+spec:
+  selector:
+    matchLabels:
+      app: active-mq
+  replicas: 1 # amount of pods must be > 1
+  template:
+    metadata:
+      labels:
+        app: active-mq
+    spec:
+      containers:
+      - name: active-mq
+        image: webcenter/activemq:latest
+        #image: apache/activemq-artemis:latest
+        #image: apache/activemq-artemis:2.30.0
+        #command:
+        #- sleep
+        #- "infinity"
+        
+        volumeMounts:
+        - name: active-creds
+          mountPath: /home/jboss/amq-broker/etc/jetty-realm.properties
+          #mountPath: /home/jboss/amq-broker/etc/jetty-realm.properties
+          #mountPath: /var/lib/artemis-instance/etc/jetty-realm.properties
+          subPath: jetty-realm.properties
+          #mountPath: /opt/activemq/conf/jetty-realm.properties
+
+      volumes:
+      - name: active-creds
+        secret:
+          secretName: creds
+
+#Bell Internet 
+#1-800-773-2121

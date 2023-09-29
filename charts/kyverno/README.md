@@ -1,7 +1,8 @@
 # Kyverno
 
 [Kyverno](https://https://kyverno.io/) is a Policy resources management for Kubernetes
-
+https://github.com/kyverno/kyverno/tree/main/charts/kyverno
+https://stackoverflow.com/questions/70615434/kustomize-resource-github-private-repository
 ```bash
 # Register official chart repository
 helm repo add jenkins https://charts.jenkins.io
