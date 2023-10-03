@@ -12,8 +12,8 @@ spec:
       #adminUser: admin
       #adminPassword: admin
 
-  adminUser: admin
-  adminPassword: admin
+  #adminUser: admin
+  #adminPassword: admin
   connectors:
   - items:
     name: openwire
@@ -25,8 +25,8 @@ spec:
     port: 61616
     protocols: CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE
   env:
-    - name: AMQ_ENABLE_JOLOKIA_AGENT
-      value: true
+  #  - name: AMQ_ENABLE_JOLOKIA_AGENT
+  #    value: true
     - name: JDK_JAVA_OPTIONS
       value: |
         -XshowSettings:system      
