@@ -6,8 +6,8 @@ metadata:
 spec:
   
   console:
-      expose: true
-      sslEnabled: false
+    expose: true
+    sslEnabled: false
       #securityEnabled: true
       #adminUser: admin
       #adminPassword: admin
@@ -20,28 +20,21 @@ spec:
     host: 0.0.0.0
     port: 61616
   acceptors:
-  #  - name: amqp
-  #    protocols: amqp
-  #    port: 5672
-  #    connectionsAllowed: 5
-  #- items:
   - name: artemis
     bindToAllInterfaces: true
     port: 61616
     protocols: CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE
-  #  - name: openwire
-  #    expose: true
-  #    protocols: OPENWIRE
-  #    port: 61616
-  #    connectionsAllowed: 1000
   env:
+    - name: AMQ_ENABLE_JOLOKIA_AGENT
+      value: true
     - name: JDK_JAVA_OPTIONS
       value: |
         -XshowSettings:system      
         -Dbrokerconfig.transaction-timeout=0 
         -Dbrokerconfig.globalMaxSize=1000000
-        -Dbrokerconfig.security-enabled=false
-        -Dhawtio.authenticationEnabled=false
+        -Dbrokerconfig.security-enabled=true
+        -Dhawtio.authenticationEnabled=true
+      
   deploymentPlan:
     size: 1 #cluster mode deployment
     requireLogin: true

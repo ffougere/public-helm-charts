@@ -3,7 +3,7 @@ entries:
   keycloakx:
   - apiVersion: v2
     appVersion: 21.1.1
-    created: "2023-09-29T19:40:21.893105709-04:00"
+    created: "2023-10-03T15:39:09.283362687-04:00"
     description: Keycloak.X - Open Source Identity and Access Management for Modern
       Applications and Services
     digest: a4140e96d6be4822e71101e62abc87b2d896e531f6c27b9f4267f23f24460327
@@ -42,4 +42,4 @@ entries:
     urls:
     - https://github.com/ffougere/public-helm-charts/charts/selenium-1.0.0.tgz
     version: 1.0.0
-generated: "2023-09-29T19:40:21.889399762-04:00"
+generated: "2023-10-03T15:39:09.279016737-04:00"
