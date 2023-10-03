@@ -12,8 +12,8 @@ spec:
       #adminUser: admin
       #adminPassword: admin
 
-  #adminUser: admin
-  #adminPassword: admin
+  adminUser: admin
+  adminPassword: xxx
   connectors:
   - items:
     name: openwire
