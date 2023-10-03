@@ -27,6 +27,8 @@ spec:
   env:
   #  - name: AMQ_ENABLE_JOLOKIA_AGENT
   #    value: true
+    AMQ_ENABLE_JOLOKIA_AGENT: true
+  
     - name: JDK_JAVA_OPTIONS
       value: |
         -XshowSettings:system      
