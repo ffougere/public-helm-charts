@@ -13,7 +13,7 @@ spec:
       #adminPassword: admin
 
   adminUser: admin
-  adminPassword: xxx
+  adminPassword: admin
   connectors:
   - items:
     name: openwire
