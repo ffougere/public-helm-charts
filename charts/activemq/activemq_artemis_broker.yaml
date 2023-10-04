@@ -15,20 +15,20 @@ spec:
   adminUser: admin
   adminPassword: admin2
   
-  volumeMounts:
-    - name: active-creds
+  #volumeMounts:
+  #  - name: active-creds
       #mountPath: /home/jboss/amq-broker/etc/jetty-realm.properties
       #subPath: jetty-realm.properties
-      mountPath: /home/jboss/amq-broker/etc/artemis-users.properties
-      subPath: artemis-users.properties
+  #    mountPath: /home/jboss/amq-broker/etc/artemis-users.properties
+  #    subPath: artemis-users.properties
 
-  volumes:
-  - name: active-creds
-    secret:
-      secretName: creds
-    extraMounts:
-      secrets:
-      - "basic-auth"
+  #volumes:
+  #- name: active-creds
+  #  secret:
+  #    secretName: creds
+  #  extraMounts:
+  #    secrets:
+  #    - "basic-auth"
 
   connectors:
   - items:
