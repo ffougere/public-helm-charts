@@ -50,7 +50,7 @@ spec:
         -XshowSettings:system      
         -Dbrokerconfig.transaction-timeout=0 
         -Dbrokerconfig.globalMaxSize=1000000
-        -Dbrokerconfig.security-enabled=true
+        -Dbrokerconfig.security-enabled=false
         -Dhawtio.authenticationEnabled=true
       
   deploymentPlan:
