@@ -51,7 +51,7 @@ spec:
         -Dbrokerconfig.transaction-timeout=0 
         -Dbrokerconfig.globalMaxSize=1000000
         -Dbrokerconfig.security-enabled=false
-        -Dhawtio.authenticationEnabled=true
+        -Dhawtio.authenticationEnabled=false
       
   deploymentPlan:
     size: 1 #cluster mode deployment
