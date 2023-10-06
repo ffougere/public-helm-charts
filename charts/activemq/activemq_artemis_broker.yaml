@@ -11,7 +11,8 @@ spec:
     #securityEnabled: true
   
   adminUser: admin
-  adminPassword: admin2
+  adminPassword: admin3
+  #adminPassword: $secret$
   
 #  volumes:
 #  - name: active-creds
@@ -27,8 +28,6 @@ spec:
       #subPath: jetty-realm.properties
 #      mountPath: /home/jboss/amq-broker/etc/artemis-users.properties
 #      subPath: artemis-users.properties
-
-  
 
   connectors:
   - items:
@@ -66,7 +65,16 @@ spec:
       fsGroupChangePolicy: "OnRootMismatch"
     storage:
       size: 2Gi
-   
+
+    containers:   
+    #  volumes:
+#  - name: active-creds
+#    secret:
+#      secretName: creds
+#    extraMounts:
+#      secrets:
+#      - "basic-auth"
+
     volumeMounts:
     - name: active-creds
       #mountPath: /home/jboss/amq-broker/etc/jetty-realm.properties
