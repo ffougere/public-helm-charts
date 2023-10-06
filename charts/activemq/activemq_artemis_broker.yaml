@@ -3,6 +3,8 @@ kind: ActiveMQArtemis
 metadata:
   name: activemq-broker
   namespace: activemq-artemis-operator
+  labels:
+    ActiveMQArtemis: activemq-broker
 spec:
   
   console:

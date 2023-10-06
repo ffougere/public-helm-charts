@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    ActiveMQArtemis: activemq-broker # ex-aao
+    ActiveMQArtemis: activemq-broker # e1x-aao
     #application: activemq-broker-app #ex-aao-app
   name: activemq-service-global
   namespace: activemq-artemis-operator
