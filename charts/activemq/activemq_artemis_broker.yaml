@@ -75,9 +75,9 @@ spec:
 #      secrets:
 #      - "basic-auth"
 
-    volumeMounts:
-    - name: active-creds
+    #volumeMounts:
+    #- name: active-creds
       #mountPath: /home/jboss/amq-broker/etc/jetty-realm.properties
       #subPath: jetty-realm.properties
-      mountPath: /home/jboss/amq-broker/etc/artemis-users.properties
-      subPath: artemis-users.properties
+    #  mountPath: /home/jboss/amq-broker/etc/artemis-users.properties
+    #  subPath: artemis-users.properties
